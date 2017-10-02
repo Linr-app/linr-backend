@@ -8,25 +8,20 @@ chai.use(chaiHttp)
 const server = require("../backend")
 const knex = require("../backend/database/connection")
 
-describe("routes : restaurantes", () => {
+describe("routes : fila", () => {
   beforeEach(() => {
-    return knex.migrate.rollback()
-      .then(() => {
-        return knex.migrate.latest()
-      })
-      .then(() => {
-        return knex.seed.run()
-      })
+    return knex.migrate
+      .rollback()
+      .then(() => knex.migrate.latest())
+      .then(() => knex.seed.run())
   })
 
-  afterEach(() => {
-    return knex.migrate.rollback()
-  })
+  afterEach(() => knex.migrate.rollback())
 
-  describe("GET /restaurante", () => {
-    it("should return all restaurante", done => {
+  describe("GET /fila", () => {
+    it("should return all fila", done => {
       chai.request(server)
-        .get("/restaurante")
+        .get("/fila")
         .end((err, res) => {
           // there should be no errors
           should.not.exist(err)
@@ -38,24 +33,23 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "error"}
           res.body.status.should.eql("ok")
           // the JSON response body should have a
-          // key-value pair of {"data": [2 restaurante objects]}
-          res.body.data.length.should.eql(2)
+          // key-value pair of {"data": [3 fila objects]}
+          res.body.data.length.should.eql(3)
           // the first object in the data array should
           // have the right keys
           res.body.data[0].should.include.keys(
-            "id", "nome", "endereco", "descricao", "site", "telefone",
+            "id", "restaurante_id",
             "hora_funcionamento_inicio", "hora_funcionamento_fim",
-            "forma_pagamento", "informacao_adicional",
           )
           done()
         })
     })
   })
 
-  describe("GET /restaurante/:id", () => {
-    it("should respond with a single restaurante", done => {
+  describe("GET /fila/:id", () => {
+    it("should respond with a single fila", done => {
       chai.request(server)
-        .get("/restaurante/1")
+        .get("/fila/1")
         .end((err, res) => {
           // there should be no errors
           should.not.exist(err)
@@ -67,18 +61,17 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "error"}
           res.body.status.should.eql("ok")
           // the JSON response body should have a
-          // key-value pair of {"data": 1 restaurante object}
+          // key-value pair of {"data": 1 fila object}
           res.body.data[0].should.include.keys(
-            "id", "nome", "endereco", "descricao", "site", "telefone",
+            "id", "restaurante_id",
             "hora_funcionamento_inicio", "hora_funcionamento_fim",
-            "forma_pagamento", "informacao_adicional",
           )
           done()
         })
     })
-    it("should throw an error if the restaurante does not exist", done => {
+    it("should throw an error if the fila does not exist", done => {
       chai.request(server)
-        .get("/restaurante/9999999")
+        .get("/fila/9999999")
         .end((err, res) => {
           // there should an error
           should.exist(err)
@@ -90,28 +83,22 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "error"}
           res.body.status.should.eql("error")
           // the JSON response body should have a
-          // key-value pair of {"message": "Este restaurante nao existe"}
-          res.body.message.should.eql("Este restaurante nao existe")
+          // key-value pair of {"message": "Este fila nao existe"}
+          res.body.message.should.eql("Este fila nao existe")
           done()
         })
     })
   })
 
-  describe("POST /restaurante", () => {
-    it("should return the restaurante that was added", done => {
+  describe("POST /fila", () => {
+    it("should return the fila that was added", done => {
       chai.request(server)
-        .post("/restaurante")
+        .post("/fila")
         .send({
-          id: 3, // TODO FIX THIS
-          nome: "Restaurante Teste",
-          endereco: "Endereco Teste",
-          descricao: "Descricao Teste",
-          site: "www.siteteste.com",
-          telefone: "123456789",
-          hora_funcionamento_inicio: [null, null, null, null, null, null, null],
-          hora_funcionamento_fim: [null, null, null, null, null, null, null],
-          forma_pagamento: ["VISA", "MASTERCARD", "DINHEIRO"],
-          informacao_adicional: "Informacao Adicional Teste",
+          id: 4,
+          restaurante_id: 1,
+          hora_funcionamento_inicio: "00:00",
+          hora_funcionamento_fim: "00:00",
         })
         .end((err, res) => {
           // there should be no errors
@@ -125,26 +112,19 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "success"}
           res.body.status.should.eql("ok")
           // the JSON response body should have a
-          // key-value pair of {"data": 1 restaurante object}
+          // key-value pair of {"data": 1 fila object}
           res.body.data[0].should.include.keys(
-            "id", "nome", "endereco", "descricao", "site", "telefone",
+            "id", "restaurante_id",
             "hora_funcionamento_inicio", "hora_funcionamento_fim",
-            "forma_pagamento", "informacao_adicional",
           )
           done()
         })
     })
     it("should throw an error if the payload is malformed", done => {
       chai.request(server)
-        .post("/restaurante")
+        .post("/fila")
         .send({
-          nome: "Restaurante Teste",
-          endereco: "Endereco Teste",
-          descricao: "Descricao Teste",
-          site: "www.siteteste.com",
-          telefone: "123456789",
-          forma_pagamento: ["VISA", "MASTERCARD", "DINHEIRO"],
-          informacao_adicional: "Informacao Adicional Teste",
+          hora_funcionamento_inicio: "01:00",
         })
         .end((err, res) => {
           // there should an error
@@ -163,16 +143,16 @@ describe("routes : restaurantes", () => {
     })
   })
 
-  describe("PUT /restaurante", () => {
-    it("should return the restaurante that was updated", done => {
-      knex("restaurante")
+  describe("PUT /fila", () => {
+    it("should return the fila that was updated", done => {
+      knex("fila")
         .select("*")
-        .then(restaurante_db => {
-          const restaurante = restaurante_db[0]
+        .then(fila_db => {
+          const fila = fila_db[0]
           chai.request(server)
-            .put(`/restaurante/${restaurante.id}`)
+            .put(`/fila/${fila.id}`)
             .send({
-              descricao: "Descricao nova",
+              hora_funcionamento_inicio: "01:00",
             })
             .end((err, res) => {
               // there should be no errors
@@ -185,24 +165,23 @@ describe("routes : restaurantes", () => {
               // key-value pair of {"status": "success"}
               res.body.status.should.eql("ok")
               // the JSON response body should have a
-              // key-value pair of {"data": 1 restaurante object}
+              // key-value pair of {"data": 1 fila object}
               res.body.data[0].should.include.keys(
-                "id", "nome", "endereco", "descricao", "site", "telefone",
+                "id", "restaurante_id",
                 "hora_funcionamento_inicio", "hora_funcionamento_fim",
-                "forma_pagamento", "informacao_adicional",
               )
-              // ensure the restaurante was in fact updated
-              const newRestaurante = res.body.data[0]
-              newRestaurante.descricao.should.not.eql(restaurante.descricao)
+              // ensure the fila was in fact updated
+              const newfila = res.body.data[0]
+              newfila.hora_funcionamento_inicio.should.not.eql(fila.hora_funcionamento_inicio)
               done()
             })
         })
     })
-    it("should throw an error if the restaurante does not exist", done => {
+    it("should throw an error if the fila does not exist", done => {
       chai.request(server)
-        .put("/restaurante/9999999")
+        .put("/fila/9999999")
         .send({
-          descricao: "Descricao nova",
+          hora_funcionamento_inicio: "11:00",
         })
         .end((err, res) => {
           // there should an error
@@ -215,22 +194,22 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "error"}
           res.body.status.should.eql("error")
           // the JSON response body should have a
-          // key-value pair of {"message": "Este restaurante nao existe"}
-          res.body.message.should.eql("Este restaurante nao existe")
+          // key-value pair of {"message": "Este fila nao existe"}
+          res.body.message.should.eql("Este fila nao existe")
           done()
         })
     })
   })
 
-  describe("DELETE /restaurante/:id", () => {
-    it("should return the restaurante that was deleted", done => {
-      knex("restaurante")
+  describe("DELETE /fila/:id", () => {
+    it("should return the fila that was deleted", done => {
+      knex("fila")
         .select("*")
-        .then(restaurante_db => {
-          const restaurante = restaurante_db[0]
-          const lengthBeforeDelete = restaurante_db.length
+        .then(fila_db => {
+          const fila = fila_db[0]
+          const lengthBeforeDelete = fila_db.length
           chai.request(server)
-            .delete(`/restaurante/${restaurante.id}`)
+            .delete(`/fila/${fila.id}`)
             .end((err, res) => {
               // there should be no errors
               should.not.exist(err)
@@ -242,25 +221,24 @@ describe("routes : restaurantes", () => {
               // key-value pair of {"status": "success"}
               res.body.status.should.eql("ok")
               // the JSON response body should have a
-              // key-value pair of {"data": 1 restaurante object}
+              // key-value pair of {"data": 1 fila object}
               res.body.data[0].should.include.keys(
-                "id", "nome", "endereco", "descricao", "site", "telefone",
+                "id", "restaurante_id",
                 "hora_funcionamento_inicio", "hora_funcionamento_fim",
-                "forma_pagamento", "informacao_adicional",
               )
-              // ensure the restaurante was in fact deleted
-              knex("restaurante")
+              // ensure the fila was in fact deleted
+              knex("fila")
                 .select("*")
-                .then(updatedrestaurantes => {
-                  updatedrestaurantes.length.should.eql(lengthBeforeDelete - 1)
+                .then(updatedfilas => {
+                  updatedfilas.length.should.eql(lengthBeforeDelete - 1)
                   done()
                 })
             })
         })
     })
-    it("should throw an error if the restaurante does not exist", (done) => {
+    it("should throw an error if the fila does not exist", (done) => {
       chai.request(server)
-        .delete("/restaurante/9999999")
+        .delete("/fila/9999999")
         .end((err, res) => {
           // there should an error
           should.exist(err)
@@ -272,8 +250,8 @@ describe("routes : restaurantes", () => {
           // key-value pair of {"status": "error"}
           res.body.status.should.eql("error")
           // the JSON response body should have a
-          // key-value pair of {"message": "That restaurante does not exist."}
-          res.body.message.should.eql("Este restaurante nao existe")
+          // key-value pair of {"message": "That fila does not exist."}
+          res.body.message.should.eql("Este fila nao existe")
           done()
         })
     })
