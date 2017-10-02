@@ -1,12 +1,15 @@
 const Router = require("koa-router")
 
-const controllers = require("../controllers")
+const Restaurante = require("./restaurante")
 
-function routes(app) {
-  const router = new Router()
-  router.use("/", controllers.routes(), controllers.allowedMethods())
-  app.use(router.routes())
-  app.use(router.allowedMethods())
-}
+const router = new Router()
 
-module.exports = routes
+router.all("/", async ctx => {
+  ctx.body = {
+    message: "Hello!",
+  }
+})
+router.use("/restaurante", Restaurante.routes(), Restaurante.allowedMethods())
+
+
+module.exports = router
