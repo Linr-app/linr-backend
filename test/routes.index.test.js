@@ -7,13 +7,6 @@ chai.use(chaiHttp)
 
 const server = require("../backend")
 
-/**
- GET    /restaurante        Return ALL restaurants
- GET    /restaurante/:id    Return a SINGLE restaurant
- POST   /restaurante        Add a restaurant
- PUT    /restaurante/:id    Update a restaurant
- DELETE /restaurante/:id    Delete a restaurant
- */
 
 describe("routes : Index", () => {
 
@@ -32,4 +25,3 @@ describe("routes : Index", () => {
   })
 
 })
-
