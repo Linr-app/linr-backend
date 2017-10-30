@@ -11,6 +11,12 @@ module.exports.getSingleFila = id => {
     .where({id: parseInt(id)})
 }
 
+module.exports.getTempoMedio = id => {
+  return knex('fila')
+    .select('tempo_medio_inicial')
+    .where({id: parseInt(id)})
+}
+
 module.exports.addFila = fila => {
   return knex('fila')
     .insert(fila)
