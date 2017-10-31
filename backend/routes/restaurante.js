@@ -92,6 +92,7 @@ router.put('/:id', async ctx => {
 router.delete('/:id', async ctx => {
   try {
     const restaurante = await queries.deleteRestaurante(ctx.params.id)
+    logger.debug(restaurante)
     if (restaurante.length) {
       ctx.status = 200
       ctx.body = {
@@ -115,4 +116,3 @@ router.delete('/:id', async ctx => {
 })
 
 module.exports = router
-
