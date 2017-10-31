@@ -60,7 +60,7 @@ or objetos descritos a seguir.
       hora_funcionamento_fim: string,
       forma_pagamento: string,
       informacao_adicional: string,
-      fila: [string],
+      filas: [string],
     },
     ...
   ]
@@ -80,7 +80,7 @@ or objetos descritos a seguir.
     hora_funcionamento_fim: string,
     forma_pagamento: string,
     informacao_adicional: string,
-    fila: [string],
+    filas: [string],
   }
   ```
 3. POST   /restaurante

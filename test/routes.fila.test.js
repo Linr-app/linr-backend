@@ -38,8 +38,9 @@ describe('routes : fila', () => {
           // the first object in the data array should
           // have the right keys
           res.body.data[0].should.include.keys(
-            'id', 'restaurante_id',
+            'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
+            'tempo_medio_inicial',
           )
           done()
         })
@@ -63,8 +64,9 @@ describe('routes : fila', () => {
           // the JSON response body should have a
           // key-value pair of {"data": 1 fila object}
           res.body.data[0].should.include.keys(
-            'id', 'restaurante_id',
+            'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
+            'tempo_medio_inicial',
           )
           done()
         })
@@ -96,9 +98,10 @@ describe('routes : fila', () => {
         .post('/fila')
         .send({
           id: 4,
-          restaurante_id: 1,
+          id_restaurante: 1,
           hora_funcionamento_inicio: '00:00',
           hora_funcionamento_fim: '00:00',
+          tempo_medio_inicial: 42,
         })
         .end((err, res) => {
           // there should be no errors
@@ -114,8 +117,9 @@ describe('routes : fila', () => {
           // the JSON response body should have a
           // key-value pair of {"data": 1 fila object}
           res.body.data[0].should.include.keys(
-            'id', 'restaurante_id',
+            'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
+            'tempo_medio_inicial',
           )
           done()
         })
@@ -167,8 +171,9 @@ describe('routes : fila', () => {
               // the JSON response body should have a
               // key-value pair of {"data": 1 fila object}
               res.body.data[0].should.include.keys(
-                'id', 'restaurante_id',
+                'id', 'id_restaurante',
                 'hora_funcionamento_inicio', 'hora_funcionamento_fim',
+                'tempo_medio_inicial',
               )
               // ensure the fila was in fact updated
               const newfila = res.body.data[0]
@@ -223,8 +228,9 @@ describe('routes : fila', () => {
               // the JSON response body should have a
               // key-value pair of {"data": 1 fila object}
               res.body.data[0].should.include.keys(
-                'id', 'restaurante_id',
+                'id', 'id_restaurante',
                 'hora_funcionamento_inicio', 'hora_funcionamento_fim',
+                'tempo_medio_inicial',
               )
               // ensure the fila was in fact deleted
               knex('fila')
