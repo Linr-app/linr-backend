@@ -53,7 +53,7 @@ describe('routes : restaurantes', () => {
           res.body.data[0].should.include.keys(
             'id', 'nome', 'endereco', 'descricao', 'site', 'telefone',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'forma_pagamento', 'informacao_adicional',
+            'forma_pagamento', 'informacao_adicional', 'filas',
           )
           done()
         })
@@ -79,7 +79,7 @@ describe('routes : restaurantes', () => {
           res.body.data[0].should.include.keys(
             'id', 'nome', 'endereco', 'descricao', 'site', 'telefone',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'forma_pagamento', 'informacao_adicional',
+            'forma_pagamento', 'informacao_adicional', 'filas',
           )
           done()
         })

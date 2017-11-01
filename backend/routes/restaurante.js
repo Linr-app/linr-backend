@@ -92,7 +92,7 @@ router.put('/:id', async ctx => {
 router.delete('/:id', async ctx => {
   try {
     const restaurante = await queries.deleteRestaurante(ctx.params.id)
-    logger.debug(restaurante)
+    logger.debug('Restaurante deletado:', restaurante)
     if (restaurante.length) {
       ctx.status = 200
       ctx.body = {
