@@ -18,7 +18,7 @@ module.exports = app => {
 
   app.use(logging())
   app.use(bodyParser())
-  app.use(cors({credentials: true, origin: 'true'}))
+  app.use(cors({credentials: true, origin: '*'}))
 
   // Setup session
   app.keys = ['VERY SECRET KEY GOES HERE EVENTUALLY']
