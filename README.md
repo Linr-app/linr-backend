@@ -32,6 +32,16 @@ yarn
 
 ## API
 
+Para fazer chamadas ao API do frontend, basta fazer o seguinte:
+
+```js
+this.$http.get('/api/meu_endpoint').then(response => {
+  // fazer o que precisa com o retorno
+})
+```
+
+Mais documentação de como usar isso: https://github.com/axios/axios
+
 O API sempre retorna no formato
 
 ```json
@@ -49,7 +59,7 @@ or objetos descritos a seguir.
   Retorna todos os objetos Restaurante:
   ```json
   [
-    { 
+    {
       id: string,
       nome: string,
       endereco: string,
@@ -69,7 +79,7 @@ or objetos descritos a seguir.
 
   Retorna um unico objeto Restaurante:
   ```json
-  { 
+  {
     id: string,
     nome: string,
     endereco: string,
@@ -87,7 +97,7 @@ or objetos descritos a seguir.
 
   Adiciona um restaurante novo. Campos necessários para a inserção:
   ```json
-  { 
+  {
     id: string,
     nome: string,
     endereco: string,
@@ -100,7 +110,7 @@ or objetos descritos a seguir.
 4. GET    /fila
 
   Retorna todas as filas em uma lista.
-  
+
 5. GET    /fila/:id
 
   Retorna a fila com o id especificado
@@ -118,3 +128,24 @@ or objetos descritos a seguir.
   }
   ```
 
+7. PUT    /fila/:id
+
+  Edita uma fila existente. Campos possíveis de alteração:
+  ```json
+  {
+    hora_funcionamento_inicio: string,
+    hora_funcionamento_fim: string,
+    tempo_medio_inicial: integer,
+  }
+  ```
+
+8. PUT    /fila/:id/enter
+
+  Adiciona um novo usuario na fila :id. Campos necessários para inserção:
+  ```json
+  {
+    id_usuario: integer,
+    qtd_pessoas: integer,
+  }
+  ```
+  em que `ìd_usuario` é o ID do usuário a ser inserido.
