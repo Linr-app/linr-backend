@@ -25,12 +25,32 @@ router.get('/logout', async ctx => {
 
 router.post('/new', async ctx => {
   try {
-    console.log(`/auth/new POST ${JSON.stringify(ctx.request.body)}`)
-    const usuario = await queries.addUsuarioCadastrado(ctx.request.body)
-    console.log(`Novo usuario: ${JSON.stringify(usuario)}`)
+    const [usuario] = await queries.addUsuarioCadastrado(ctx.request.body)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
+      data: {
+        id_usuario: usuario.id_usuario,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.post('/new/temp', async ctx => {
+  try {
+    const [usuario] = await queries.addUsuario(ctx.request.body)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
     }
   } catch (err) {
     ctx.status = 400
@@ -42,4 +62,3 @@ router.post('/new', async ctx => {
 })
 
 module.exports = router
-

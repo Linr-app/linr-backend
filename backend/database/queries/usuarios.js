@@ -3,13 +3,13 @@ const knex = require('../connection')
 module.exports.getSingleUsuarioCadastradoById = id => {
   return knex('usuario_cadastrado')
     .select('*')
-    .where({id: parseInt(id)})
+    .where('id', parseInt(id))
 }
 
 module.exports.getSingleUsuarioById = id => {
   return knex('usuario')
     .select('*')
-    .where({id: parseInt(id)})
+    .where('id', parseInt(id))
 }
 
 module.exports.getSingleUsuarioCadastradoByEmail = email => {
@@ -42,11 +42,10 @@ module.exports.addUsuarioCadastrado = usuario_cadastrado => {
       telefone: usuario_cadastrado.telefone,
     })
     .returning('*')
-    .then(usuario_inserido => {
-      console.log(`usuario inserido = ${JSON.stringify(usuario_inserido)}`)
+    .then(([usuario_inserido]) => {
       return knex('usuario_cadastrado')
         .insert({
-          id_usuario: usuario_inserido[0].id,
+          id_usuario: usuario_inserido.id,
           email: usuario_cadastrado.email,
           senha: usuario_cadastrado.senha,
         })
