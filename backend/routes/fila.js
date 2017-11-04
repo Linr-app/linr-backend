@@ -89,21 +89,18 @@ router.put('/:id', async ctx => {
   }
 })
 
-router.delete('/:id', async ctx => {
+router.put('/:id/enter', async ctx => {
   try {
-    const fila = await queries.deleteFila(ctx.params.id)
-    if (fila.length) {
-      ctx.status = 200
-      ctx.body = {
-        status: 'ok',
-        data: fila,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: 'error',
-        message: 'Este fila nao existe',
-      }
+    const usuario = {
+      id_usuario: ctx.request.body.id_usuario,
+      qtd_pessoas: ctx.request.body.qtd_pessoas,
+    }
+    queries.addUserToFila(ctx.params.id, usuario).then(novo_usuario => {
+      logger.debug('Novo usuario:', novo_usuario)
+    })
+    ctx.status = 200
+    ctx.body = {
+      status: 'ok',
     }
   } catch (err) {
     ctx.status = 400

@@ -8,13 +8,13 @@ module.exports.getAllFilas = () => {
 module.exports.getSingleFila = id => {
   return knex('fila')
     .select('*')
-    .where({id: parseInt(id)})
+    .where('id', parseInt(id))
 }
 
 module.exports.getTempoMedio = id => {
   return knex('fila')
     .select('tempo_medio_inicial')
-    .where({id: parseInt(id)})
+    .where('id', parseInt(id))
 }
 
 module.exports.addFila = fila => {
@@ -26,13 +26,16 @@ module.exports.addFila = fila => {
 module.exports.updateFila = (id, fila) => {
   return knex('fila')
     .update(fila)
-    .where({id: parseInt(id)})
+    .where('id', parseInt(id))
     .returning('*')
 }
 
-module.exports.deleteFila = id => {
-  return knex('fila')
-    .del()
-    .where({id: parseInt(id)})
-    .returning('*')
+module.exports.addUserToFila = (id_fila, user_data) => {
+  return knex('usuario_fila')
+    .insert({
+      id_fila: id_fila,
+      id_usuario: user_data.id_usuario,
+      qtd_pessoas: user_data.qtd_pessoas,
+    })
+    .where('id_fila', parseInt(id_fila))
 }
