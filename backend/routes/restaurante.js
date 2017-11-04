@@ -89,30 +89,4 @@ router.put('/:id', async ctx => {
   }
 })
 
-router.delete('/:id', async ctx => {
-  try {
-    const restaurante = await queries.deleteRestaurante(ctx.params.id)
-    logger.debug('Restaurante deletado:', restaurante)
-    if (restaurante.length) {
-      ctx.status = 200
-      ctx.body = {
-        status: 'ok',
-        data: restaurante,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: 'error',
-        message: 'Este restaurante nao existe',
-      }
-    }
-  } catch (err) {
-    ctx.status = 400
-    ctx.body = {
-      status: 'error',
-      message: err.message || 'Ocorreu um erro no servidor',
-    }
-  }
-})
-
 module.exports = router
