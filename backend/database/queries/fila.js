@@ -38,4 +38,5 @@ module.exports.addUserToFila = (id_fila, user_data) => {
       qtd_pessoas: user_data.qtd_pessoas,
     })
     .where('id_fila', parseInt(id_fila))
+    .returning('*')
 }

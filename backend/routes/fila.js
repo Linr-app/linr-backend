@@ -95,9 +95,7 @@ router.put('/:id/enter', async ctx => {
       id_usuario: ctx.request.body.id_usuario,
       qtd_pessoas: ctx.request.body.qtd_pessoas,
     }
-    queries.addUserToFila(ctx.params.id, usuario).then(novo_usuario => {
-      logger.debug('Novo usuario:', novo_usuario)
-    })
+    const novo_usuario = await queries.addUserToFila(ctx.params.id, usuario)
     ctx.status = 200
     ctx.body = {
       status: 'ok',
