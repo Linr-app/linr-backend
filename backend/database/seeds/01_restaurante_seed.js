@@ -1,11 +1,8 @@
 exports.seed = (knex, Promise) => {
-  // Deletes ALL existing entries
   return knex('restaurante').del()
     .then(() => {
-      // Inserts seed entries
       return knex('restaurante').insert([
         {
-          id: 1,
           nome: 'Restaurante 1',
           endereco: 'Endereco 1',
           descricao: 'Descricao 1',
@@ -17,7 +14,6 @@ exports.seed = (knex, Promise) => {
           informacao_adicional: 'Informacao Adicional 1',
         },
         {
-          id: 2,
           nome: 'Restaurante 2',
           endereco: 'Endereco 2',
           descricao: 'Descricao 2',

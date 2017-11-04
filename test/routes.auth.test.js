@@ -19,11 +19,11 @@ describe('routes : auth', () => {
   afterEach(() => knex.migrate.rollback())
 
   describe('POST /auth/new', () => {
-    it('should create a new user in the database', done => {
-      knex('usuario_cadastrado')
-        .select('*')
-        .then(usuarios_cadastrados => {
-          const lengthBeforeAdd = usuarios_cadastrados.length
+    it('should create a new user in the database', function (done) {
+      knex('usuario')
+        .count('*')
+        .then(function ([old_row]) {
+          const old_count = parseInt(old_row.count)
           chai.request(server)
             .post('/auth/new')
             .send({
@@ -33,24 +33,17 @@ describe('routes : auth', () => {
               email: 'Email 10',
               senha: 'hunter10',
             })
-            .end((err, res) => {
-              // there should be no errors
+            .end(function (err, res) {
               should.not.exist(err)
-              // there should be a 201 status code
-              // (indicating that something was "created")
               res.status.should.equal(201)
-              // the response should be JSON
               res.type.should.equal('application/json')
-              // the JSON response body should have a
-              // key-value pair of {"status": "success"}
               res.body.status.should.eql('ok')
-              // the JSON response body should not exist
-              should.not.exist(res.body.data)
-              // ensure the restaurante was in fact deleted
-              knex('usuario_cadastrado')
-                .select('*')
-                .then(updated_usuarios => {
-                  updated_usuarios.length.should.eql(lengthBeforeAdd + 1)
+              res.body.data.should.include.keys('id_usuario')
+              knex('usuario')
+                .count('*')
+                .then(function ([new_row]) {
+                  const new_count = parseInt(new_row.count)
+                  should.equal(new_count, old_count + 1)
                   done()
                 })
             })
@@ -79,6 +72,37 @@ describe('routes : auth', () => {
         })
     })
     */
+  })
+
+  describe('POST /auth/new/temp', () => {
+    it('should create a new temporary user in the database', function (done) {
+      knex('usuario')
+        .count('*')
+        .then(function ([old_row]) {
+          const old_count = parseInt(old_row.count)
+          chai.request(server)
+            .post('/auth/new/temp')
+            .send({
+              id: 10,
+              nome: 'Usuario 10',
+              telefone: 'Telefone 10',
+            })
+            .end(function (err, res) {
+              should.not.exist(err)
+              res.status.should.equal(201)
+              res.type.should.equal('application/json')
+              res.body.status.should.eql('ok')
+              res.body.data.should.include.keys('id_usuario')
+              knex('usuario')
+                .count('*')
+                .then(function ([new_row]) {
+                  const new_count = parseInt(new_row.count)
+                  should.equal(new_count, old_count + 1)
+                  done()
+                })
+            })
+        })
+    })
   })
 })
 
