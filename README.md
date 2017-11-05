@@ -1,4 +1,4 @@
-# linr_backend
+# linr_backend [![Build Status](https://travis-ci.org/Linr-app/linr-backend.svg?branch=master)](https://travis-ci.org/Linr-app/linr-backend)
 
 ## Como rodar
 
