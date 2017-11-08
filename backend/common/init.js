@@ -1,7 +1,7 @@
 const onerror = require('koa-onerror')
 const bodyParser = require('koa-bodyparser')
 const logging = require('koa-logger')
-const session = require('koa-session')
+const session = require('koa-session2')
 const passport = require('koa-passport')
 const cors = require('koa2-cors')
 
@@ -21,8 +21,10 @@ module.exports = app => {
   app.use(cors({credentials: true, origin: '*'}))
 
   // Setup session
-  app.keys = ['VERY SECRET KEY GOES HERE EVENTUALLY']
-  app.use(session(app))
+  // app.keys = ['VERY SECRET KEY GOES HERE EVENTUALLY']
+  app.use(session({
+    key: 'linrapp:sess'
+  },app))
 
   // Initialize passport
   configure_passport()

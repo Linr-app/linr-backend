@@ -12,8 +12,8 @@ router.all('/', async ctx => {
   }
 })
 
-router.use('/restaurante', Restaurante.routes(), Restaurante.allowedMethods())
-router.use('/fila', Fila.routes(), Fila.allowedMethods())
+router.use('/restaurantes', Restaurante.routes(), Restaurante.allowedMethods())
+router.use('/filas', Fila.routes(), Fila.allowedMethods())
 router.use('/auth', Auth.routes(), Auth.allowedMethods())
 
 module.exports = router

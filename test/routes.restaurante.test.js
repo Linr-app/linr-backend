@@ -9,11 +9,11 @@ const server = require('../backend')
 const knex = require('../backend/database/connection')
 
 /**
- GET    /restaurante        Return ALL restaurants
- GET    /restaurante/:id    Return a SINGLE restaurant
- POST   /restaurante        Add a restaurant
- PUT    /restaurante/:id    Update a restaurant
- DELETE /restaurante/:id    Delete a restaurant
+ GET    /restaurantes        Return ALL restaurants
+ GET    /restaurantes/:id    Return a SINGLE restaurant
+ POST   /restaurantes        Add a restaurant
+ PUT    /restaurantes/:id    Update a restaurant
+ DELETE /restaurantes/:id    Delete a restaurant
  */
 
 describe('routes : restaurantes', () => {
@@ -31,10 +31,10 @@ describe('routes : restaurantes', () => {
     return knex.migrate.rollback()
   })
 
-  describe('GET /restaurante', () => {
+  describe('GET /restaurantes', () => {
     it('should return all restaurante', done => {
       chai.request(server)
-        .get('/restaurante')
+        .get('/restaurantes')
         .end((err, res) => {
           should.not.exist(err)
           res.status.should.equal(200)
@@ -51,10 +51,10 @@ describe('routes : restaurantes', () => {
     })
   })
 
-  describe('GET /restaurante/:id', () => {
+  describe('GET /restaurantes/:id', () => {
     it('should respond with a single restaurante', done => {
       chai.request(server)
-        .get('/restaurante/1')
+        .get('/restaurantes/1')
         .end((err, res) => {
           should.not.exist(err)
           res.status.should.equal(200)
@@ -70,7 +70,7 @@ describe('routes : restaurantes', () => {
     })
     it('should throw an error if the restaurante does not exist', done => {
       chai.request(server)
-        .get('/restaurante/9999999')
+        .get('/restaurantes/9999999')
         .end((err, res) => {
           should.exist(err)
           res.status.should.equal(404)
@@ -82,10 +82,10 @@ describe('routes : restaurantes', () => {
     })
   })
 
-  describe('POST /restaurante', () => {
+  describe('POST /restaurantes', () => {
     it('should return the restaurante that was added', done => {
       chai.request(server)
-        .post('/restaurante')
+        .post('/restaurantes')
         .send({
           nome: 'Restaurante Teste',
           endereco: 'Endereco Teste',
@@ -112,7 +112,7 @@ describe('routes : restaurantes', () => {
     })
     it('should throw an error if the payload is malformed', done => {
       chai.request(server)
-        .post('/restaurante')
+        .post('/restaurantes')
         .send({
           nome: 'Restaurante Teste',
         })
@@ -127,14 +127,14 @@ describe('routes : restaurantes', () => {
     })
   })
 
-  describe('PUT /restaurante', () => {
+  describe('PUT /restaurantes', () => {
     it('should return the restaurante that was updated', done => {
       knex('restaurante')
         .select('*')
         .then(restaurante_db => {
           const restaurante = restaurante_db[0]
           chai.request(server)
-            .put(`/restaurante/${restaurante.id}`)
+            .put(`/restaurantes/${restaurante.id}`)
             .send({
               descricao: 'Descricao nova',
             })
@@ -157,7 +157,7 @@ describe('routes : restaurantes', () => {
     })
     it('should throw an error if the restaurante does not exist', done => {
       chai.request(server)
-        .put('/restaurante/9999999')
+        .put('/restaurantes/9999999')
         .send({
           descricao: 'Descricao nova',
         })

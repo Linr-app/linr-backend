@@ -18,10 +18,10 @@ describe('routes : fila', () => {
 
   afterEach(() => knex.migrate.rollback())
 
-  describe('GET /fila', () => {
+  describe('GET /filas', () => {
     it('should return all fila', done => {
       chai.request(server)
-        .get('/fila')
+        .get('/filas')
         .end((err, res) => {
           should.not.exist(err)
           res.status.should.equal(200)
@@ -38,10 +38,10 @@ describe('routes : fila', () => {
     })
   })
 
-  describe('GET /fila/:id', () => {
+  describe('GET /filas/:id', () => {
     it('should respond with a single fila', done => {
       chai.request(server)
-        .get('/fila/1')
+        .get('/filas/1')
         .end((err, res) => {
           should.not.exist(err)
           res.status.should.equal(200)
@@ -57,7 +57,7 @@ describe('routes : fila', () => {
     })
     it('should throw an error if the fila does not exist', done => {
       chai.request(server)
-        .get('/fila/9999999')
+        .get('/filas/9999999')
         .end((err, res) => {
           should.exist(err)
           res.status.should.equal(404)
@@ -69,10 +69,10 @@ describe('routes : fila', () => {
     })
   })
 
-  describe('POST /fila', () => {
+  describe('POST /filas', () => {
     it('should return the fila that was added', done => {
       chai.request(server)
-        .post('/fila')
+        .post('/filas')
         .send({
           id_restaurante: 1,
           hora_funcionamento_inicio: '00:00',
@@ -94,7 +94,7 @@ describe('routes : fila', () => {
     })
     it('should throw an error if the payload is malformed', done => {
       chai.request(server)
-        .post('/fila')
+        .post('/filas')
         .send({
           hora_funcionamento_inicio: '01:00',
         })
@@ -109,13 +109,13 @@ describe('routes : fila', () => {
     })
   })
 
-  describe('PUT /fila/:id', () => {
+  describe('PUT /filas/:id', () => {
     it('should return the fila that was updated', done => {
       knex('fila')
         .select('*')
         .then(([fila]) => {
           chai.request(server)
-            .put(`/fila/${fila.id}`)
+            .put(`/filas/${fila.id}`)
             .send({
               hora_funcionamento_inicio: '01:00',
             })
@@ -138,7 +138,7 @@ describe('routes : fila', () => {
     })
     it('should throw an error if the fila does not exist', done => {
       chai.request(server)
-        .put('/fila/9999999')
+        .put('/filas/9999999')
         .send({
           hora_funcionamento_inicio: '11:00',
         })
@@ -153,7 +153,7 @@ describe('routes : fila', () => {
     })
   })
 
-  describe('PUT /fila/:id/enter', () => {
+  describe('PUT /filas/:id/enter', () => {
     it('should create a new usuario_fila', function (done) {
       knex('usuario_fila')
         .count('*')
@@ -165,7 +165,7 @@ describe('routes : fila', () => {
             .then(function ([{id: fila_id}]) {
               logger.debug(fila_id)
               chai.request(server)
-                .put(`/fila/${fila_id}/enter`)
+                .put(`/filas/${fila_id}/enter`)
                 .send({
                   id_usuario: 1,
                   qtd_pessoas: 2,

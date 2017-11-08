@@ -35,7 +35,9 @@ yarn
 Para fazer chamadas ao API do frontend, basta fazer o seguinte:
 
 ```js
-this.$http.get('/api/meu_endpoint').then(response => {
+import { api } from '../js/environment'
+
+this.$http.get(api('/meu_endpoint')).then(response => {
   // fazer o que precisa com o retorno
 })
 ```
@@ -54,7 +56,7 @@ O API sempre retorna no formato
 ou seja, o status diz se a chamada foi bem sucedida. Se sim, o campo `data` terá
 or objetos descritos a seguir.
 
-1. GET    /restaurante
+1. GET    /restaurantes
 
   Retorna todos os objetos Restaurante:
   ```json
@@ -75,7 +77,7 @@ or objetos descritos a seguir.
     ...
   ]
   ```
-2. GET    /restaurante/:id
+2. GET    /restaurantess/:id
 
   Retorna um unico objeto Restaurante:
   ```json
@@ -93,7 +95,7 @@ or objetos descritos a seguir.
     filas: [string],
   }
   ```
-3. POST   /restaurante
+3. POST   /restaurantes
 
   Adiciona um restaurante novo. Campos necessários para a inserção:
   ```json
@@ -107,15 +109,15 @@ or objetos descritos a seguir.
   }
   ```
 
-4. GET    /fila
+4. GET    /filas
 
   Retorna todas as filas em uma lista.
 
-5. GET    /fila/:id
+5. GET    /filas/:id
 
   Retorna a fila com o id especificado
 
-6. POST   /fila
+6. POST   /filas
 
   Adiciona uma nova fila. Campos necessários para a inserção:
   ```json
@@ -128,7 +130,7 @@ or objetos descritos a seguir.
   }
   ```
 
-7. PUT    /fila/:id
+7. PUT    /filas/:id
 
   Edita uma fila existente. Campos possíveis de alteração:
   ```json
@@ -139,7 +141,7 @@ or objetos descritos a seguir.
   }
   ```
 
-8. PUT    /fila/:id/enter
+8. PUT    /filas/:id/enter
 
   Adiciona um novo usuario na fila :id. Campos necessários para inserção:
   ```json
