@@ -1,6 +1,6 @@
-const Router = require("koa-router")
+const Router = require('koa-router')
 
-const queries = require("../database/queries/fila")
+const queries = require('../database/queries/fila')
 
 const router = new Router()
 
@@ -12,10 +12,10 @@ const router = new Router()
  DELETE /fila/:id    Delete a fila
  */
 
-router.get("/", async ctx => {
+router.get('/', async ctx => {
   try {
     ctx.body = {
-      status: "ok",
+      status: 'ok',
       data: await queries.getAllFilas(),
     }
   } catch (err) {
@@ -23,19 +23,19 @@ router.get("/", async ctx => {
   }
 })
 
-router.get("/:id", async ctx => {
+router.get('/:id', async ctx => {
   try {
     const fila = await queries.getSingleFila(ctx.params.id)
     if (fila.length) {
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: fila,
       }
     } else {
       ctx.status = 404
       ctx.body = {
-        status: "error",
-        message: "Este fila nao existe",
+        status: 'error',
+        message: 'Este fila nao existe',
       }
     }
   } catch (err) {
@@ -43,76 +43,70 @@ router.get("/:id", async ctx => {
   }
 })
 
-router.post("/", async ctx => {
+router.post('/', async ctx => {
   try {
     const fila = await queries.addFila(ctx.request.body)
     if (fila.length) {
       ctx.status = 201
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: fila,
       }
     } else {
-      throw new Error("Erro ao inserir fila")
+      throw new Error('Erro ao inserir fila')
     }
   } catch (err) {
     ctx.status = 400
     ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
     }
   }
 })
 
-router.put("/:id", async ctx => {
+router.put('/:id', async ctx => {
   try {
     const fila = await queries.updateFila(ctx.params.id, ctx.request.body)
     if (fila.length) {
       ctx.status = 200
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: fila,
       }
     } else {
       ctx.status = 404
       ctx.body = {
-        status: "error",
-        message: "Este fila nao existe",
+        status: 'error',
+        message: 'Este fila nao existe',
       }
     }
   } catch (err) {
     ctx.status = 400
     ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
     }
   }
 })
 
-router.delete("/:id", async ctx => {
+router.put('/:id/enter', async ctx => {
   try {
-    const fila = await queries.deleteFila(ctx.params.id)
-    if (fila.length) {
-      ctx.status = 200
-      ctx.body = {
-        status: "ok",
-        data: fila,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: "error",
-        message: "Este fila nao existe",
-      }
+    const usuario = {
+      id_usuario: ctx.request.body.id_usuario,
+      qtd_pessoas: ctx.request.body.qtd_pessoas,
+    }
+    const novo_usuario = await queries.addUserToFila(ctx.params.id, usuario)
+    ctx.status = 200
+    ctx.body = {
+      status: 'ok',
     }
   } catch (err) {
     ctx.status = 400
     ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
     }
   }
 })
-
 
 module.exports = router

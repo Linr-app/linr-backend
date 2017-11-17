@@ -19,4 +19,4 @@ before_script:
   - psql -c 'create database linr_db_test;' -U postgres
 
 script:
-- npm run test
+  - npm run test

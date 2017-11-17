@@ -1,6 +1,6 @@
-const Router = require("koa-router")
+const Router = require('koa-router')
 
-const queries = require("../database/queries/restaurante")
+const queries = require('../database/queries/restaurante')
 
 const router = new Router()
 
@@ -12,10 +12,10 @@ const router = new Router()
  DELETE /restaurante/:id    Delete a restaurant
  */
 
-router.get("/", async ctx => {
+router.get('/', async ctx => {
   try {
     ctx.body = {
-      status: "ok",
+      status: 'ok',
       data: await queries.getAllRestaurantes(),
     }
   } catch (err) {
@@ -23,19 +23,19 @@ router.get("/", async ctx => {
   }
 })
 
-router.get("/:id", async ctx => {
+router.get('/:id', async ctx => {
   try {
     const restaurante = await queries.getSingleRestaurante(ctx.params.id)
     if (restaurante.length) {
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: restaurante,
       }
     } else {
       ctx.status = 404
       ctx.body = {
-        status: "error",
-        message: "Este restaurante nao existe",
+        status: 'error',
+        message: 'Este restaurante nao existe',
       }
     }
   } catch (err) {
@@ -43,77 +43,50 @@ router.get("/:id", async ctx => {
   }
 })
 
-router.post("/", async ctx => {
+router.post('/', async ctx => {
   try {
     const restaurante = await queries.addRestaurante(ctx.request.body)
     if (restaurante.length) {
       ctx.status = 201
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: restaurante,
       }
     } else {
-      throw new Error("Erro ao inserir restaurante")
+      throw new Error('Erro ao inserir restaurante')
     }
   } catch (err) {
     ctx.status = 400
     ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
     }
   }
 })
 
-router.put("/:id", async ctx => {
+router.put('/:id', async ctx => {
   try {
     const restaurante = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
     if (restaurante.length) {
       ctx.status = 200
       ctx.body = {
-        status: "ok",
+        status: 'ok',
         data: restaurante,
       }
     } else {
       ctx.status = 404
       ctx.body = {
-        status: "error",
-        message: "Este restaurante nao existe",
+        status: 'error',
+        message: 'Este restaurante nao existe',
       }
     }
   } catch (err) {
     ctx.status = 400
     ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
     }
   }
 })
-
-router.delete("/:id", async ctx => {
-  try {
-    const restaurante = await queries.deleteRestaurante(ctx.params.id)
-    if (restaurante.length) {
-      ctx.status = 200
-      ctx.body = {
-        status: "ok",
-        data: restaurante,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: "error",
-        message: "Este restaurante nao existe",
-      }
-    }
-  } catch (err) {
-    ctx.status = 400
-    ctx.body = {
-      status: "error",
-      message: err.message || "Ocorreu um erro no servidor",
-    }
-  }
-})
-
 
 module.exports = router
-
