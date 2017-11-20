@@ -13,5 +13,3 @@ const server = app.listen(config.webPort, () => {
 })
 
 module.exports = server
-
-module.exports = server
