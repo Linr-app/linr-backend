@@ -4,12 +4,13 @@
   "description": "Backend for Linr",
   "main": "backend/index.js",
   "scripts": {
-    "start": "NODE_ENV=development node ./backend/index.js",
-    "production": "NODE_ENV=production node ./backend/index.js",
-    "test": "NODE_ENV=test mocha --exit"
+    "start": "cross-env NODE_ENV=development node ./backend/index.js",
+    "production": "cross-env NODE_ENV=production node ./backend/index.js",
+    "test": "cross-env NODE_ENV=test mocha --exit"
   },
   "author": "Ivan Dardi <ivanbdardi at gmail.com>",
   "dependencies": {
+    "cross-env": "^5.1.1",
     "egg-logger": "^1.6.0",
     "knex": "^0.13.0",
     "koa": "^2.3.0",
