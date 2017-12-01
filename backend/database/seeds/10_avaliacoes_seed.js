@@ -1,5 +1,5 @@
 exports.seed = (knex, Promise) => {
-  return knex('avaliacoes').del()
+  return knex('avaliacao').del()
     .then(() => {
       return knex('restaurante')
         .select('id')
@@ -7,26 +7,26 @@ exports.seed = (knex, Promise) => {
           return knex('usuario_cadastrado')
             .select('id_usuario')
             .then(usuario_cadastrado => {
-              return knex('avaliacoes').insert([
+              return knex('avaliacao').insert([
                 {
                   id_restaurante: restaurantes[0].id,
                   id_usuario: usuario_cadastrado[0].id,
-                  avaliacao: 0,
+                  valor: 0,
                 },
                 {
                   id_restaurante: restaurantes[0].id,
                   id_usuario: usuario_cadastrado[1].id,
-                  avaliacao: 1,
+                  valor: 1,
                 },
                 {
                   id_restaurante: restaurantes[1].id,
                   id_usuario: usuario_cadastrado[0].id,
-                  avaliacao: 3,
+                  valor: 3,
                 },
                 {
                   id_restaurante: restaurantes[1].id,
                   id_usuario: usuario_cadastrado[1].id,
-                  avaliacao: 5,
+                  valor: 5,
                 },
               ])
             })
