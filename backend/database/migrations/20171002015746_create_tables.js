@@ -68,16 +68,6 @@ exports.up = function (knex, Promise) {
         .references('categoria.id')
       table.primary(['id_restaurante', 'id_categoria'])
     })
-    .createTable('avaliacoes', table => {
-      table.bigint('id_restaurante').notNullable()
-      table.foreign('id_restaurante')
-        .references('restaurante.id')
-      table.bigint('id_usuario').notNullable()
-      table.foreign('id_usuario')
-        .references('usuario_cadastrado.id_usuario')
-      table.int('avaliacao') //Nullable ou entre [0,5] 
-      table.primary(['id_restaurante', 'id_usuario'])
-    })
     .createTable('usuario', table => {
       table.bigint('id').primary()
       table.text('nome').notNullable()
@@ -110,6 +100,16 @@ exports.up = function (knex, Promise) {
       table.integer('qtd_pessoas').notNullable()
       table.boolean('tem_reserva').notNullable().defaultTo(false)
       table.boolean('desistiu_da_fila').notNullable().defaultTo(false)
+    })
+    .createTable('avaliacoes', table => {
+      table.bigint('id_restaurante').notNullable()
+      table.foreign('id_restaurante')
+        .references('restaurante.id')
+      table.bigint('id_usuario').notNullable()
+      table.foreign('id_usuario')
+        .references('usuario_cadastrado.id_usuario')
+      table.int('avaliacao') //Nullable ou entre [0,5] 
+      table.primary(['id_restaurante', 'id_usuario'])
     })
 }
 
