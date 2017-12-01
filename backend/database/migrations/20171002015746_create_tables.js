@@ -108,7 +108,7 @@ exports.up = function (knex, Promise) {
       table.bigint('id_usuario').notNullable()
       table.foreign('id_usuario')
         .references('usuario_cadastrado.id_usuario')
-      table.int('valor') //Nullable ou entre [0,5] 
+      table.int('valor').notNullable() //Between [0,5] 
       table.primary(['id_restaurante', 'id_usuario'])
     })
 }
