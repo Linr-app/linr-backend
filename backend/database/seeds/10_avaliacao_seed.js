@@ -6,26 +6,26 @@ exports.seed = (knex, Promise) => {
         .then(restaurantes => {
           return knex('usuario_cadastrado')
             .select('id_usuario')
-            .then(usuario_cadastrado => {
+            .then(usuarios_cadastrados => {
               return knex('avaliacao').insert([
                 {
                   id_restaurante: restaurantes[0].id,
-                  id_usuario: usuario_cadastrado[0].id,
+                  id_usuario: usuarios_cadastrados[0].id_usuario,
                   valor: 0,
                 },
                 {
                   id_restaurante: restaurantes[0].id,
-                  id_usuario: usuario_cadastrado[1].id,
+                  id_usuario: usuarios_cadastrados[1].id_usuario,
                   valor: 1,
                 },
                 {
                   id_restaurante: restaurantes[1].id,
-                  id_usuario: usuario_cadastrado[0].id,
+                  id_usuario: usuarios_cadastrados[0].id_usuario,
                   valor: 3,
                 },
                 {
                   id_restaurante: restaurantes[1].id,
-                  id_usuario: usuario_cadastrado[1].id,
+                  id_usuario: usuarios_cadastrados[1].id_usuario,
                   valor: 5,
                 },
               ])

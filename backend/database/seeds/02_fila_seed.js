@@ -10,12 +10,14 @@ exports.seed = (knex, Promise) => {
               hora_funcionamento_inicio: '10:00',
               hora_funcionamento_fim: '20:00',
               tempo_medio_inicial: 15,
+              descricao: 'Pudim',
             },
             {
               id_restaurante: restaurantes[1].id,
               hora_funcionamento_inicio: '10:00',
               hora_funcionamento_fim: '20:00',
               tempo_medio_inicial: 30,
+              descricao: 'Bolo',
             },
             {
               id_restaurante: restaurantes[1].id,

@@ -31,7 +31,7 @@ describe('routes : fila', () => {
           res.body.data[0].should.include.keys(
             'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'tempo_medio_inicial',
+            'tempo_medio_inicial', 'descricao',
           )
           done()
         })
@@ -50,7 +50,7 @@ describe('routes : fila', () => {
           res.body.data[0].should.include.keys(
             'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'tempo_medio_inicial',
+            'tempo_medio_inicial', 'descricao',
           )
           done()
         })
@@ -78,6 +78,7 @@ describe('routes : fila', () => {
           hora_funcionamento_inicio: '00:00',
           hora_funcionamento_fim: '00:00',
           tempo_medio_inicial: 42,
+          descricao: 'Eu gosto de pudim',
         })
         .end((err, res) => {
           should.not.exist(err)
@@ -87,7 +88,7 @@ describe('routes : fila', () => {
           res.body.data[0].should.include.keys(
             'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'tempo_medio_inicial',
+            'tempo_medio_inicial', 'descricao',
           )
           done()
         })
@@ -127,7 +128,7 @@ describe('routes : fila', () => {
               res.body.data[0].should.include.keys(
                 'id', 'id_restaurante',
                 'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-                'tempo_medio_inicial',
+                'tempo_medio_inicial', 'descricao',
               )
               const newfila = res.body.data[0]
               newfila.hora_funcionamento_inicio.should.not.eql(fila.hora_funcionamento_inicio)
