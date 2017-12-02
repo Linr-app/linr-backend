@@ -101,10 +101,21 @@ exports.up = function (knex, Promise) {
       table.boolean('tem_reserva').notNullable().defaultTo(false)
       table.boolean('desistiu_da_fila').notNullable().defaultTo(false)
     })
+    .createTable('avaliacao', table => {
+      table.bigint('id_restaurante').notNullable()
+      table.foreign('id_restaurante')
+        .references('restaurante.id')
+      table.bigint('id_usuario').notNullable()
+      table.foreign('id_usuario')
+        .references('usuario_cadastrado.id_usuario')
+      table.int('valor').notNullable() //Between [0,5] 
+      table.primary(['id_restaurante', 'id_usuario'])
+    })
 }
 
 exports.down = function (knex, Promise) {
   return knex.schema
+    .dropTableIfExists('avaliacao')
     .dropTableIfExists('usuario_fila')
     .dropTableIfExists('usuario_cadastrado')
     .dropTableIfExists('usuario')
