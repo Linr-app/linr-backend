@@ -47,10 +47,10 @@ describe('routes : fila', () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.status.should.eql('ok')
-          res.body.data[0].should.include.keys(
+          res.body.data.should.include.keys(
             'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'tempo_medio_inicial', 'descricao',
+            'tempo_medio_inicial', 'descricao', 'usuarios_na_fila',
           )
           done()
         })

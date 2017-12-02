@@ -26,7 +26,7 @@ router.get('/', async ctx => {
 router.get('/:id', async ctx => {
   try {
     const fila = await queries.getSingleFila(ctx.params.id)
-    if (fila.length) {
+    if (fila) {
       ctx.body = {
         status: 'ok',
         data: fila,
