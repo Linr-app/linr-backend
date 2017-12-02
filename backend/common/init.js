@@ -23,8 +23,8 @@ module.exports = app => {
   // Setup session
   // app.keys = ['VERY SECRET KEY GOES HERE EVENTUALLY']
   app.use(session({
-    key: 'linrapp:sess'
-  },app))
+    key: 'linrapp:sess',
+  }, app))
 
   // Initialize passport
   configure_passport()
@@ -53,4 +53,15 @@ function configure_passport () {
         })
         .catch(err => done(err))
     }))
+
+  passport.serializeUser((user, done) => {
+    done(null, user.id)
+  })
+
+  passport.deserializeUser((id, done) => {
+    Usuario.getSingleUsuarioCadastradoById(id).then(([user]) => {
+      done(null, user)
+    })
+    .catch(err => done(err, null))
+  })
 }
