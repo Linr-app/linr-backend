@@ -30,6 +30,7 @@ exports.up = function (knex, Promise) {
       table.time('hora_funcionamento_inicio')
       table.time('hora_funcionamento_fim')
       table.integer('tempo_medio_inicial').notNullable()
+      table.text('descricao')
     })
     .createTable('usuario_adm', table => {
       table.bigincrements()
@@ -71,7 +72,7 @@ exports.up = function (knex, Promise) {
     .createTable('usuario', table => {
       table.bigint('id').primary()
       table.text('nome').notNullable()
-      table.string('telefone', 15).notNullable().unique()
+      table.string('telefone', 15).notNullable()
     })
     .createTable('usuario_cadastrado', table => {
       table.bigint('id_usuario').notNullable()
@@ -108,7 +109,7 @@ exports.up = function (knex, Promise) {
       table.bigint('id_usuario').notNullable()
       table.foreign('id_usuario')
         .references('usuario_cadastrado.id_usuario')
-      table.int('valor').notNullable() //Between [0,5] 
+      table.int('valor').notNullable() //Between [0,5]
       table.primary(['id_restaurante', 'id_usuario'])
     })
 }
