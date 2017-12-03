@@ -52,6 +52,7 @@ describe('routes : fila', () => {
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
             'tempo_medio_inicial', 'descricao', 'usuarios_na_fila',
           )
+          logger.debug(res.body.data)
           done()
         })
     })
