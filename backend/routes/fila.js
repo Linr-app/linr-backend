@@ -109,4 +109,21 @@ router.put('/:id/enter', async ctx => {
   }
 })
 
+router.put('/:id/remove', async ctx => {
+  try {
+    const id_usuario = ctx.request.body.id_usuario_fila
+    const novo_usuario = await queries.setUserAsGivenUp(ctx.params.id, id_usuario)
+    ctx.status = 200
+    ctx.body = {
+      status: 'ok',
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
 module.exports = router

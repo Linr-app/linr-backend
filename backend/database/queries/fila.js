@@ -21,18 +21,11 @@ module.exports.getSingleFila = id => {
           hora_saida_restaurante: null,
           desistiu_da_fila: false,
         })
-        .andWhere('hora_entrada_fila', '>=', knex.fn.now())
         .then(usuarios_na_fila => {
           fila.usuarios_na_fila = usuarios_na_fila
           return fila
         })
     })
-}
-
-module.exports.getTempoMedio = id => {
-  return knex('fila')
-    .select('tempo_medio_inicial')
-    .where('id', parseInt(id))
 }
 
 module.exports.addFila = fila => {
@@ -55,6 +48,17 @@ module.exports.addUserToFila = (id_fila, user_data) => {
       id_usuario: user_data.id_usuario,
       qtd_pessoas: user_data.qtd_pessoas,
     })
-    .where('id_fila', parseInt(id_fila))
+    .returning('*')
+}
+
+module.exports.setUserAsGivenUp = (id_fila, id_usuario) => {
+  return knex('usuario_fila')
+    .update({
+      desistiu_da_fila: true,
+    })
+    .where({
+      'id_fila': parseInt(id_fila),
+      'id_usuario': id_usuario,
+    })
     .returning('*')
 }
