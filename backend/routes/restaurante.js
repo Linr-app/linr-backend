@@ -159,12 +159,12 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
   }
 })
 
-//AVALIACAO
+// AVALIACAO
+
 router.get('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av_media = await queries.getAverageAvaliacao (ctx.params.id_restaurante)
-    const av_user = await queries.getAvaliacao(ctx.params.id_restaurante,ctx.request.body)
-    
+    const av_media = await queries.getAverageAvaliacao(ctx.params.id_restaurante)
+    const av_user = await queries.getAvaliacao(ctx.params.id_restaurante, ctx.request.body)
     ctx.body = {
       status: 'ok',
       data: {
@@ -172,16 +172,20 @@ router.get('/:id_restaurante/avaliacao', async ctx => {
         avaliacao_usuario: av_user,
       }
     }
-    
   } catch (err) {
     console.log(err)
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
   }
 })
 
 
 router.post('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av = await queries.createAvaliacao (ctx.params.id_restaurante,ctx.request.body)
+    const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.request.body)
     if (av.length) {
       ctx.status = 201
       ctx.body = {
@@ -202,7 +206,7 @@ router.post('/:id_restaurante/avaliacao', async ctx => {
 
 router.put('/:id_restaurante/avalicao', async ctx => {
   try {
-    const av = await queries.updateAvaliacao (ctx.params.id_restaurante,ctx.request.body)
+    const av = await queries.updateAvaliacao(ctx.params.id_restaurante, ctx.request.body)
     if (av) {
       ctx.status = 200
       ctx.body = {
