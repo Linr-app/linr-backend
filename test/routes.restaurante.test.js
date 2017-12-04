@@ -139,16 +139,19 @@ describe('routes : restaurantes', () => {
               descricao: 'Descricao nova',
             })
             .end((err, res) => {
+              if (err) {
+                logger.error(err)
+              }
               should.not.exist(err)
               res.status.should.equal(200)
               res.type.should.equal('application/json')
               res.body.status.should.eql('ok')
-              res.body.data[0].should.include.keys(
+              res.body.data.should.include.keys(
                 'id', 'nome', 'endereco', 'descricao', 'site', 'telefone',
                 'hora_funcionamento_inicio', 'hora_funcionamento_fim',
                 'forma_pagamento', 'informacao_adicional',
               )
-              const newRestaurante = res.body.data[0]
+              const newRestaurante = res.body.data
               newRestaurante.descricao.should.not.eql(restaurante.descricao)
               done()
             })

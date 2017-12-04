@@ -45,10 +45,10 @@ module.exports.addRestaurante = restaurante => {
     .returning('*')
 }
 
-module.exports.updateRestaurante = (id_restaurante, id_mesa) => {
-  return knex('mesa')
+module.exports.updateRestaurante = (id_restaurante, restaurante) => {
+  return knex('restaurante')
     .update(restaurante)
-    .where('id', parseInt(id))
+    .where('id', parseInt(id_restaurante))
     .returning('*')
 }
 
@@ -58,9 +58,12 @@ module.exports.addMesa = mesa => {
     .returning('*')
 }
 
-module.exports.updateMesa = (id, restaurante) => {
-  return knex('restaurante')
-    .update(restaurante)
-    .where('id', parseInt(id))
+module.exports.updateMesa = (ids, mesa) => {
+  return knex('mesa')
+    .update(mesa)
+    .where({
+      id_mesa: parseInt(ids.id_mesa),
+      id_restaurante: parseInt(ids.id_restaurante),
+    })
     .returning('*')
 }
