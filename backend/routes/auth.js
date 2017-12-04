@@ -1,5 +1,4 @@
 const Router = require('koa-router')
-const passport = require('koa-passport')
 
 const queries = require('../database/queries/usuarios')
 
@@ -11,12 +10,38 @@ const router = new Router()
  POST   /new    Register a new user
  */
 
-router.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/',
-  }),
-)
+/**
+ * Parametros:
+ *  email
+ *  senha
+ */
+router.post('/login', async ctx => {
+  const email = ctx.request.body.email
+  const senha = ctx.request.body.senha
+  const [usuario] = await queries.getSingleUsuarioCadastradoByEmail(email)
+  if (usuario) {
+    // Usuario existe
+    if (usuario.senha === senha) {
+      // Usuario acertou a senha. Retorna uma nova sessao para ele
+      ctx.status = 200
+      ctx.body = {
+
+      }
+    } else {
+      ctx.status = 400
+      ctx.body = {
+        status: 'error',
+        message: 'Senha errada'
+      }
+    }
+  } else {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Usuario nao existe'
+    }
+  }
+})
 
 router.get('/logout', async ctx => {
   ctx.logout()

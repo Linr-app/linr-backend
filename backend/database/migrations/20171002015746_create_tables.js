@@ -112,10 +112,18 @@ exports.up = function (knex, Promise) {
       table.integer('valor').notNullable() //Between [0,5]
       table.primary(['id_restaurante', 'id_usuario'])
     })
+    .createTable('sessao', table => {
+      table.bigint('id_usuario').notNullable()
+      table.foreign('id_usuario')
+        .references('usuario_cadastrado.id_usuario')
+        .onDelete('cascade')
+        .onUpdate('cascade')
+    })
 }
 
 exports.down = function (knex, Promise) {
   return knex.schema
+    .dropTableIfExists('sessao')
     .dropTableIfExists('avaliacao')
     .dropTableIfExists('usuario_fila')
     .dropTableIfExists('usuario_cadastrado')

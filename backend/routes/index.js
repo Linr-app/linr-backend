@@ -7,8 +7,6 @@ const Fila = require('./fila')
 const router = new Router()
 
 router.all('/', async ctx => {
-  logger.debug('SESSION: ', ctx.session)
-  logger.debug('USER: ', ctx.user)
   ctx.body = {
     message: 'Hello!',
   }
