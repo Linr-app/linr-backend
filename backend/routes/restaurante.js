@@ -10,6 +10,11 @@ const router = new Router()
  POST   /restaurante        Add a restaurant
  PUT    /restaurante/:id    Update a restaurant
  DELETE /restaurante/:id    Delete a restaurant
+ 
+ GET    /restaurante/:id/avaliacao/           Returna a avaliação media
+ GET    /restaurante/:id/avaliacao/           Returna a avaliação de uma pessoa
+ POST   /restaurante/:id/avaliacao/           Add uma avaliação
+ PUT    /restaurante/:id/avaliacao/           Atualiza uma avaliacao
  */
 
 router.get('/', async ctx => {
@@ -143,6 +148,72 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
       ctx.body = {
         status: 'error',
         message: 'Esta mesa nao existe',
+      }
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+//AVALIACAO
+router.get('/:id_restaurante/avaliacao', async ctx => {
+  try {
+    const av_media = await queries.getAverageAvaliacao (ctx.params.id_restaurante)
+    const av_user = await queries.getAvaliacao(ctx.params.id_restaurante,ctx.request.body)
+    
+    ctx.body = {
+      status: 'ok',
+      data: {
+        avaliacao_media: av_media,
+        avaliacao_usuario: av_user,
+      }
+    }
+    
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+
+router.post('/:id_restaurante/avaliacao', async ctx => {
+  try {
+    const av = await queries.createAvaliacao (ctx.params.id_restaurante,ctx.request.body)
+    if (av.length) {
+      ctx.status = 201
+      ctx.body = {
+        status: 'ok',
+        data: av,
+      }
+    } else {
+      throw new Error('Erro ao inserir avaliacao')
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/:id_restaurante/avalicao', async ctx => {
+  try {
+    const av = await queries.updateAvaliacao (ctx.params.id_restaurante,ctx.request.body)
+    if (av) {
+      ctx.status = 200
+      ctx.body = {
+        status: 'ok',
+        data: av,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta avaliação nao existe',
       }
     }
   } catch (err) {
