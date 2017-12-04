@@ -11,10 +11,10 @@ const router = new Router()
  PUT    /restaurante/:id    Update a restaurant
  DELETE /restaurante/:id    Delete a restaurant
  
- GET    /restaurante/avaliacao/:id           Returna a avaliação media
- GET    /restaurante/avaliacao/:ids          Returna a avaliação de uma pessoa
- POST   /restaurante/avaliacao/:avaliacao    Add uma avaliação
- PUT    /restaurante/avaliacao/:avaliacao    Atualiza uma avaliacao
+ GET    /restaurante/:id/avaliacao/           Returna a avaliação media
+ GET    /restaurante/:id/avaliacao/           Returna a avaliação de uma pessoa
+ POST   /restaurante/:id/avaliacao/           Add uma avaliação
+ PUT    /restaurante/:id/avaliacao/           Atualiza uma avaliacao
  */
 
 router.get('/', async ctx => {
@@ -156,9 +156,31 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
 })
 
 //AVALIACAO
-router.get('/avaliacao/:id', async ctx => {
+router.get('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av = await queries.getAverageAvaliacao (ctx.params.id)
+    const av = await queries.getAverageAvaliacao (ctx.params.id_restaurante)
+    const av2 = await queries.getAvaliacao(ctx.params.id_restaurante,ctx.request.body) //DUAS
+    if (av && av2) {
+      ctx.body = {
+        status: 'ok',
+        data: av,
+        data2: av2,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta avaliação nao existe',
+      }
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+/*router.get('/:id_restaurante/avaliacao/:id_usuario_cadastrado', async ctx => {
+  try {
+    const av = await queries.getAvaliacao(ctx.params,)
     if (av) {
       ctx.body = {
         status: 'ok',
@@ -174,31 +196,11 @@ router.get('/avaliacao/:id', async ctx => {
   } catch (err) {
     console.log(err)
   }
-})
+})*/
 
-router.get('/avaliacao/:ids', async ctx => {
+router.post('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av = await queries.getAvaliacao (ctx.request.body)
-    if (av) {
-      ctx.body = {
-        status: 'ok',
-        data: av,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: 'error',
-        message: 'Esta avaliação nao existe',
-      }
-    }
-  } catch (err) {
-    console.log(err)
-  }
-})
-
-router.post('/avaliacao/:avaliacao', async ctx => {
-  try {
-    const av = await queries.createAvaliacao (ctx.request.body)
+    const av = await queries.createAvaliacao (ctx.params.id_restaurante,ctx.request.body)
     if (av.length) {
       ctx.status = 201
       ctx.body = {
@@ -217,9 +219,9 @@ router.post('/avaliacao/:avaliacao', async ctx => {
   }
 })
 
-router.put('/avaliacao/:avalicao', async ctx => {
+router.put('/:id_restaurante/avalicao', async ctx => {
   try {
-    const av = await queries.updateAvaliacao (ctx.request.body)
+    const av = await queries.updateAvaliacao (ctx.params.id_restaurante,ctx.request.body)
     if (av) {
       ctx.status = 200
       ctx.body = {
