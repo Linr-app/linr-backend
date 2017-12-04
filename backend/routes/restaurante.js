@@ -160,19 +160,13 @@ router.get('/:id_restaurante/avaliacao', async ctx => {
   try {
     const av = await queries.getAverageAvaliacao (ctx.params.id_restaurante)
     const av2 = await queries.getAvaliacao(ctx.params.id_restaurante,ctx.request.body) //DUAS
-    if (av && av2) {
-      ctx.body = {
-        status: 'ok',
-        data: av,
-        data2: av2,
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: 'error',
-        message: 'Esta avaliação nao existe',
-      }
+    
+    ctx.body = {
+      status: 'ok',
+      data: av,
+      data2: av2,
     }
+    
   } catch (err) {
     console.log(err)
   }
