@@ -17,34 +17,40 @@ const router = new Router()
  */
 router.post('/login', async ctx => {
   const email = ctx.request.body.email
+  logger.debug('email: ', email)
   const senha = ctx.request.body.senha
   const [usuario] = await queries.getSingleUsuarioCadastradoByEmail(email)
+  logger.debug('Usuario: ', usuario)
   if (usuario) {
     // Usuario existe
     if (usuario.senha === senha) {
       // Usuario acertou a senha. Retorna uma nova sessao para ele
+      const [token] = await queries.generateTokenForUser(usuario.id)
       ctx.status = 200
       ctx.body = {
         status: 'ok',
         session: {
-          usuario_id: usuario.id,
-          usuario_nome: usuario.nome,
-          usuario_email: usuario.email,
-          usuario_telefone: usuario.telefone,
-        }
+          usuario: {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            telefone: usuario.telefone,
+          },
+          token: token,
+        },
       }
     } else {
       ctx.status = 400
       ctx.body = {
         status: 'error',
-        message: 'Senha errada'
+        message: 'Senha errada',
       }
     }
   } else {
     ctx.status = 400
     ctx.body = {
       status: 'error',
-      message: err.message || 'Usuario nao existe'
+      message: 'Usuario nao existe',
     }
   }
 })

@@ -113,11 +113,12 @@ exports.up = function (knex, Promise) {
       table.primary(['id_restaurante', 'id_usuario'])
     })
     .createTable('sessao', table => {
-      table.bigint('id_usuario').notNullable()
+      table.bigint('id_usuario').primary()
       table.foreign('id_usuario')
         .references('usuario_cadastrado.id_usuario')
         .onDelete('cascade')
         .onUpdate('cascade')
+      table.integer('token').notNullable()
     })
 }
 
