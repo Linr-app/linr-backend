@@ -60,10 +60,10 @@ describe('routes : restaurantes', () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.status.should.eql('ok')
-          res.body.data[0].should.include.keys(
+          res.body.data.should.include.keys(
             'id', 'nome', 'endereco', 'descricao', 'site', 'telefone',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'forma_pagamento', 'informacao_adicional', 'filas',
+            'forma_pagamento', 'informacao_adicional', 'filas', 'mesas',
           )
           done()
         })
@@ -167,6 +167,30 @@ describe('routes : restaurantes', () => {
           res.type.should.equal('application/json')
           res.body.status.should.eql('error')
           res.body.message.should.eql('Este restaurante nao existe')
+          done()
+        })
+    })
+  })
+
+  describe('POST /restaurantes/:id/mesas', () => {
+    it('should create a mesa', done => {
+      chai.request(server)
+        .post('/restaurantes/1/mesas')
+        .send({
+          id_mesa: 4,
+          capacidade: 4,
+        })
+        .end((err, res) => {
+          if (err) {
+            logger.error(err)
+          }
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.status.should.eql('ok')
+          res.body.data.should.include.keys(
+            'id_mesa', 'id_restaurante', 'capacidade', 'ocupada',
+          )
           done()
         })
     })

@@ -57,7 +57,7 @@ exports.up = function (knex, Promise) {
         .onDelete('cascade')
         .onUpdate('cascade')
       table.integer('capacidade').notNullable()
-      table.boolean('ocupada').notNullable()
+      table.boolean('ocupada').notNullable().defaultTo(false)
       table.primary(['id_mesa', 'id_restaurante'])
     })
     .createTable('restaurante_categoria', table => {

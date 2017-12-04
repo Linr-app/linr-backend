@@ -26,7 +26,7 @@ router.get('/', async ctx => {
 router.get('/:id', async ctx => {
   try {
     const restaurante = await queries.getSingleRestaurante(ctx.params.id)
-    if (restaurante.length) {
+    if (restaurante) {
       ctx.body = {
         status: 'ok',
         data: restaurante,
@@ -78,6 +78,67 @@ router.put('/:id', async ctx => {
       ctx.body = {
         status: 'error',
         message: 'Este restaurante nao existe',
+      }
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+/**
+ * Parametros:
+ *  id_mesa
+ *  capacidade
+ *
+ */
+router.post('/:id/mesas', async ctx => {
+  try {
+    const params = {
+      id_restaurante: ctx.params.id,
+      id_mesa: ctx.request.body.id_mesa,
+      capacidade: ctx.request.body.capacidade,
+    }
+    const [mesa] = await queries.addMesa(params)
+    if (mesa) {
+      ctx.status = 200
+      ctx.body = {
+        status: 'ok',
+        data: mesa,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta mesa nao existe',
+      }
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
+  try {
+    const mesa = await queries.updateMesa(ctx.params, )
+    if (mesa) {
+      ctx.status = 200
+      ctx.body = {
+        status: 'ok',
+        data: mesa,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta mesa nao existe',
       }
     }
   } catch (err) {
