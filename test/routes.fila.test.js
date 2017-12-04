@@ -47,11 +47,12 @@ describe('routes : fila', () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.status.should.eql('ok')
-          res.body.data[0].should.include.keys(
+          res.body.data.should.include.keys(
             'id', 'id_restaurante',
             'hora_funcionamento_inicio', 'hora_funcionamento_fim',
-            'tempo_medio_inicial', 'descricao',
+            'tempo_medio_inicial', 'descricao', 'usuarios_na_fila',
           )
+          logger.debug(res.body.data)
           done()
         })
     })
@@ -172,6 +173,9 @@ describe('routes : fila', () => {
                   qtd_pessoas: 2,
                 })
                 .end(function (err, res) {
+                  if (err) {
+                    logger.error(err)
+                  }
                   should.not.exist(err)
                   res.status.should.equal(200)
                   res.type.should.equal('application/json')
@@ -184,6 +188,37 @@ describe('routes : fila', () => {
                       done()
                     })
                     .catch(done)
+                })
+            })
+            .catch(done)
+        })
+        .catch(done)
+    })
+  })
+
+  describe('PUT /filas/:id/remove', () => {
+    it('should mark a user as given up', function (done) {
+      knex('usuario_fila')
+        .select('id')
+        .then(function ([{id: id_usuario_fila}]) {
+          knex('fila')
+            .select('id')
+            .limit(1)
+            .then(function ([{id: fila_id}]) {
+              chai.request(server)
+                .put(`/filas/${fila_id}/remove`)
+                .send({
+                  id_usuario_fila: id_usuario_fila,
+                })
+                .end(function (err, res) {
+                  if (err) {
+                    logger.error(err)
+                  }
+                  should.not.exist(err)
+                  res.status.should.equal(200)
+                  res.type.should.equal('application/json')
+                  res.body.status.should.eql('ok')
+                  done()
                 })
             })
             .catch(done)

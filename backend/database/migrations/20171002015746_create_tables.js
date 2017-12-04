@@ -42,7 +42,7 @@ exports.up = function (knex, Promise) {
       table.text('nome').notNullable()
       table.text('email').notNullable()
       table.text('senha').notNullable()
-      table.enu('tipo', ['dono', 'garcom']).notNullable()
+      table.enu('tipo', ['gerente', 'funcionario']).notNullable()
     })
     .createTable('categoria', table => {
       table.bigincrements()
@@ -57,7 +57,7 @@ exports.up = function (knex, Promise) {
         .onDelete('cascade')
         .onUpdate('cascade')
       table.integer('capacidade').notNullable()
-      table.boolean('ocupada').notNullable()
+      table.boolean('ocupada').notNullable().defaultTo(false)
       table.primary(['id_mesa', 'id_restaurante'])
     })
     .createTable('restaurante_categoria', table => {

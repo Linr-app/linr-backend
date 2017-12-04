@@ -26,7 +26,7 @@ router.get('/', async ctx => {
 router.get('/:id', async ctx => {
   try {
     const restaurante = await queries.getSingleRestaurante(ctx.params.id)
-    if (restaurante.length) {
+    if (restaurante) {
       ctx.body = {
         status: 'ok',
         data: restaurante,
@@ -66,8 +66,8 @@ router.post('/', async ctx => {
 
 router.put('/:id', async ctx => {
   try {
-    const restaurante = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
-    if (restaurante.length) {
+    const [restaurante] = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
+    if (restaurante) {
       ctx.status = 200
       ctx.body = {
         status: 'ok',
@@ -78,6 +78,71 @@ router.put('/:id', async ctx => {
       ctx.body = {
         status: 'error',
         message: 'Este restaurante nao existe',
+      }
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+/**
+ * Parametros:
+ *  id_mesa
+ *  capacidade
+ *
+ */
+router.post('/:id/mesas', async ctx => {
+  try {
+    const params = {
+      id_restaurante: ctx.params.id,
+      id_mesa: ctx.request.body.id_mesa,
+      capacidade: ctx.request.body.capacidade,
+    }
+    const [mesa] = await queries.addMesa(params)
+    if (mesa) {
+      ctx.status = 200
+      ctx.body = {
+        status: 'ok',
+        data: mesa,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta mesa nao existe',
+      }
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
+  try {
+    const ids = {
+      id_restaurante: ctx.params.id_restaurante,
+      id_mesa: ctx.params.id_mesa,
+    }
+    const mesa = await queries.updateMesa(ids, ctx.params.body)
+    if (mesa) {
+      ctx.status = 200
+      ctx.body = {
+        status: 'ok',
+        data: mesa,
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = {
+        status: 'error',
+        message: 'Esta mesa nao existe',
       }
     }
   } catch (err) {
