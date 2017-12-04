@@ -81,6 +81,7 @@ router.post('/new', async ctx => {
 
 router.post('/new/temp', async ctx => {
   try {
+    logger.debug("Inserindo usuario temporario")
     const [usuario] = await queries.addUsuario(ctx.request.body)
     ctx.status = 201
     ctx.body = {
