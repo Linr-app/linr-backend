@@ -111,8 +111,8 @@ router.put('/:id/enter', async ctx => {
 
 router.put('/:id/remove', async ctx => {
   try {
-    const id_usuario = ctx.request.body.id_usuario_fila
-    const novo_usuario = await queries.setUserAsGivenUp(ctx.params.id, id_usuario)
+    const id_usuario_fila = ctx.request.body.id_usuario_fila
+    const novo_usuario = await queries.setUserAsGivenUp(id_usuario_fila)
     ctx.status = 200
     ctx.body = {
       status: 'ok',
