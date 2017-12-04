@@ -25,7 +25,13 @@ router.post('/login', async ctx => {
       // Usuario acertou a senha. Retorna uma nova sessao para ele
       ctx.status = 200
       ctx.body = {
-
+        status: 'ok',
+        session: {
+          usuario_id: usuario.id,
+          usuario_nome: usuario.nome,
+          usuario_email: usuario.email,
+          usuario_telefone: usuario.telefone,
+        }
       }
     } else {
       ctx.status = 400

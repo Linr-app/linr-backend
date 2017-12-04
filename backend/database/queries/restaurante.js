@@ -28,7 +28,7 @@ module.exports.getSingleRestaurante = id => {
       }
       return knex('mesa')
         .select('mesa.id_mesa', 'mesa.capacidade', 'mesa.ocupada')
-        .join('restaurante', 'mesa.id_restaurante', 'restaurante.id')
+        .where('mesa.id_restaurante', restaurante.id)
         .then(mesas => {
           restaurante.mesas = mesas
           return restaurante
