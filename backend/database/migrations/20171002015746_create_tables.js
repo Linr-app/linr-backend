@@ -57,7 +57,7 @@ exports.up = function (knex, Promise) {
         .onDelete('cascade')
         .onUpdate('cascade')
       table.integer('capacidade').notNullable()
-      table.boolean('ocupada').notNullable()
+      table.boolean('ocupada').notNullable().defaultTo(false)
       table.primary(['id_mesa', 'id_restaurante'])
     })
     .createTable('restaurante_categoria', table => {
@@ -112,10 +112,19 @@ exports.up = function (knex, Promise) {
       table.integer('valor').notNullable() //Between [0,5]
       table.primary(['id_restaurante', 'id_usuario'])
     })
+    .createTable('sessao', table => {
+      table.bigint('id_usuario').primary()
+      table.foreign('id_usuario')
+        .references('usuario_cadastrado.id_usuario')
+        .onDelete('cascade')
+        .onUpdate('cascade')
+      table.integer('token').notNullable()
+    })
 }
 
 exports.down = function (knex, Promise) {
   return knex.schema
+    .dropTableIfExists('sessao')
     .dropTableIfExists('avaliacao')
     .dropTableIfExists('usuario_fila')
     .dropTableIfExists('usuario_cadastrado')

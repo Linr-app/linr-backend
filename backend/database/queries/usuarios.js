@@ -1,21 +1,39 @@
 const knex = require('../connection')
 
+module.exports.generateTokenForUser = id => {
+  const token = Math.floor(Math.random() * 1000000 + 1)
+  return knex('sessao')
+    .where('id_usuario', parseInt(id))
+    .del()
+    .then(result => {
+      return knex('sessao')
+        .insert({
+          id_usuario: id,
+          token: token,
+        })
+        .returning('token')
+    })
+}
+
 module.exports.getSingleUsuarioCadastradoById = id => {
   return knex('usuario_cadastrado')
     .select('*')
+    .join('usuario', 'usuario.id', 'usuario_cadastrado.id_usuario')
     .where('id', parseInt(id))
 }
 
 module.exports.getSingleUsuarioById = id => {
   return knex('usuario')
     .select('*')
+    .join('usuario', 'usuario.id', 'usuario_cadastrado.id_usuario')
     .where('id', parseInt(id))
 }
 
 module.exports.getSingleUsuarioCadastradoByEmail = email => {
   return knex('usuario_cadastrado')
     .select('*')
-    .where({email: parseInt(email)})
+    .join('usuario', 'usuario.id', 'usuario_cadastrado.id_usuario')
+    .where({email: email})
 }
 
 module.exports.addUsuario = usuario => {

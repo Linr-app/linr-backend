@@ -71,8 +71,8 @@ router.post('/', async ctx => {
 
 router.put('/:id', async ctx => {
   try {
-    const restaurante = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
-    if (restaurante.length) {
+    const [restaurante] = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
+    if (restaurante) {
       ctx.status = 200
       ctx.body = {
         status: 'ok',
@@ -132,7 +132,11 @@ router.post('/:id/mesas', async ctx => {
 
 router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
   try {
-    const mesa = await queries.updateMesa(ctx.params, )
+    const ids = {
+      id_restaurante: ctx.params.id_restaurante,
+      id_mesa: ctx.params.id_mesa,
+    }
+    const mesa = await queries.updateMesa(ids, ctx.params.body)
     if (mesa) {
       ctx.status = 200
       ctx.body = {
@@ -164,8 +168,8 @@ router.get('/:id_restaurante/avaliacao', async ctx => {
     ctx.body = {
       status: 'ok',
       data: {
-            avaliacao_media: av_media,
-            avaliacao_usuario: av_user,
+        avaliacao_media: av_media,
+        avaliacao_usuario: av_user,
       }
     }
     

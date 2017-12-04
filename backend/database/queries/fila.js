@@ -19,7 +19,7 @@ module.exports.getSingleFila = id => {
         .leftJoin('usuario_cadastrado', 'usuario.id', 'usuario_cadastrado.id_usuario')
         .join('usuario_fila', 'usuario_fila.id_usuario', 'usuario.id')
         .select(
-          'usuario_fila.id',
+          'usuario_fila.id_usuario',
           'usuario_fila.hora_entrada_fila',
           'usuario_fila.hora_entrada_atendimento',
           'usuario_fila.hora_saida_restaurante',
@@ -63,16 +63,13 @@ module.exports.addUserToFila = (id_fila, user_data) => {
     .returning('*')
 }
 
-module.exports.setUserAsGivenUp = (id_fila, id_usuario) => {
+module.exports.setUserAsGivenUp = (id_usuario_fila) => {
   return knex('usuario_fila')
     .update({
       hora_saida_restaurante: knex.fn.now(),
       desistiu_da_fila: true,
     })
-    .where({
-      'id_fila': parseInt(id_fila),
-      'id_usuario': id_usuario,
-    })
+    .where('id', id_usuario_fila)
     .returning('*')
 }
 
