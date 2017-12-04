@@ -63,16 +63,13 @@ module.exports.addUserToFila = (id_fila, user_data) => {
     .returning('*')
 }
 
-module.exports.setUserAsGivenUp = (id_fila, id_usuario) => {
+module.exports.setUserAsGivenUp = id_usuario_fila => {
   return knex('usuario_fila')
     .update({
       hora_saida_restaurante: knex.fn.now(),
       desistiu_da_fila: true,
     })
-    .where({
-      'id_fila': parseInt(id_fila),
-      'id_usuario': id_usuario,
-    })
+    .where('id', id_usuario_fila)
     .returning('*')
 }
 
