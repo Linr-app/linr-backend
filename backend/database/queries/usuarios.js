@@ -47,7 +47,7 @@ module.exports.addUsuario = usuario => {
     .returning('*')
 }
 
-module.exports.updateTokenUsuarioCadastrado => (id_usuario, fcmtoken) {
+module.exports.updateTokenUsuarioCadastrado = (id_usuario, fcmtoken) => {
   return knex('usuario_fila')
     .update({
       fcmtoken: fcmtoken
