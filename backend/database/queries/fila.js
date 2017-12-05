@@ -14,7 +14,7 @@ module.exports.getSingleFila = id => {
         return null
       }
       return knex
-        .select('usuario.nome', 'usuario.telefone', 'usuario.token')
+        .select('usuario.nome', 'usuario.telefone', 'usuario.fcmtoken')
         .from('usuario')
         .leftJoin('usuario_cadastrado', 'usuario.id', 'usuario_cadastrado.id_usuario')
         .join('usuario_fila', 'usuario_fila.id_usuario', 'usuario.id')

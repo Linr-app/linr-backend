@@ -5,9 +5,10 @@ const queries = require('../database/queries/usuarios')
 const router = new Router()
 
 /**
- GET    /logout Logout an user
- POST   /login  Login an user
+ GET    /logout Logout a user
+ POST   /login  Login a user
  POST   /new    Register a new user
+ PUT    /update Update a user's FCM token
  */
 
 /**
@@ -82,6 +83,25 @@ router.post('/new', async ctx => {
 router.post('/new/temp', async ctx => {
   try {
     const [usuario] = await queries.addUsuario(ctx.request.body)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/update', async ctx => {
+  try {
+    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body)
     ctx.status = 201
     ctx.body = {
       status: 'ok',

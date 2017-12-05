@@ -41,8 +41,19 @@ module.exports.addUsuario = usuario => {
     .insert({
       id: usuario.id,
       nome: usuario.nome,
-      token: usuario.token,
+      fcmtoken: usuario.token,
       telefone: usuario.telefone,
+    })
+    .returning('*')
+}
+
+module.exports.updateTokenUsuarioCadastrado => (id_usuario, fcmtoken) {
+  return knex('usuario_fila')
+    .update({
+      fcmtoken: fcmtoken
+    })
+    .where({
+      'id_usuario': id_usuario,
     })
     .returning('*')
 }
@@ -58,7 +69,7 @@ module.exports.addUsuarioCadastrado = usuario_cadastrado => {
     .insert({
       id: usuario_cadastrado.id,
       nome: usuario_cadastrado.nome,
-      token: usuario_cadastrado.token,
+      fcmtoken: usuario_cadastrado.fcmtoken,
       telefone: usuario_cadastrado.telefone,
     })
     .returning('*')
