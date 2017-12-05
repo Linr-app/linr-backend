@@ -109,7 +109,7 @@ router.put('/:id/enter', async ctx => {
   }
 })
 
-router.put('/:id/remove', async ctx => {
+router.put('/:id/desistir', async ctx => {
   try {
     const id_usuario_fila = ctx.request.body.id_usuario_fila
     const novo_usuario = await queries.setUserAsGivenUp(id_usuario_fila)
@@ -126,7 +126,7 @@ router.put('/:id/remove', async ctx => {
   }
 })
 
-router.put('/:id/exit', async ctx => {
+router.put('/:id/sair', async ctx => {
   try {
     const id_usuario = ctx.request.body.id_usuario_fila
     const novo_usuario = await queries.setUserAsExited(ctx.params.id, id_usuario)

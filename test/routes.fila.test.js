@@ -196,7 +196,7 @@ describe('routes : fila', () => {
     })
   })
 
-  describe('PUT /filas/:id/remove', () => {
+  describe('PUT /filas/:id/desistir', () => {
     it('should mark a user as given up', function (done) {
       knex('usuario_fila')
         .select('id')
