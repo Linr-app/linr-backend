@@ -72,6 +72,7 @@ exports.up = function (knex, Promise) {
     .createTable('usuario', table => {
       table.bigint('id').primary()
       table.text('nome').notNullable()
+      table.text('token')
       table.string('telefone', 15).notNullable()
     })
     .createTable('usuario_cadastrado', table => {

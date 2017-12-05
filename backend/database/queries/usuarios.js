@@ -41,6 +41,7 @@ module.exports.addUsuario = usuario => {
     .insert({
       id: usuario.id,
       nome: usuario.nome,
+      token: usuario.token,
       telefone: usuario.telefone,
     })
     .returning('*')
@@ -57,6 +58,7 @@ module.exports.addUsuarioCadastrado = usuario_cadastrado => {
     .insert({
       id: usuario_cadastrado.id,
       nome: usuario_cadastrado.nome,
+      token: usuario_cadastrado.token,
       telefone: usuario_cadastrado.telefone,
     })
     .returning('*')
