@@ -47,6 +47,27 @@ module.exports.addUsuario = usuario => {
     .returning('*')
 }
 
+module.exports.updateNomeUsuarioCadastrado = (id_usuario, nome) => {
+  return knex('usuario')
+    .where('id', parseInt(id_usuario))
+    .update({nome: nome})
+    .returning('*')
+}
+
+module.exports.updateEmailUsuarioCadastrado = (id_usuario, email) => {
+  return knex('usuario_cadastrado')
+    .where('id_usuario', parseInt(id_usuario))
+    .update({email: email})
+    .returning('*')
+}
+
+module.exports.updateSenhaUsuarioCadastrado = (id_usuario, senha) => {
+  return knex('usuario_cadastrado')
+    .where('id_usuario', parseInt(id_usuario))
+    .update({senha: senha})
+    .returning('*')
+}
+
 module.exports.updateTokenUsuarioCadastrado = (id_usuario, fcmtoken) => {
   return knex('usuario')
     .where('id', parseInt(id_usuario))
