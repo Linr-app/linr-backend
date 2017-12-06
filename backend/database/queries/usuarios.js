@@ -33,7 +33,18 @@ module.exports.getSingleUsuarioCadastradoByEmail = email => {
   return knex('usuario_cadastrado')
     .select('*')
     .join('usuario', 'usuario.id', 'usuario_cadastrado.id_usuario')
-    .where({email: email})
+    .where('usuario_cadastrado.email', email)
+    .then(([usuario]) => {
+      return knex('usuario_fila')
+        .select('usuario_fila.*', 'restaurante.nome')
+        .where('usuario_fila.id_usuario', usuario.id)
+        .join('fila', 'fila.id', 'usuario_fila.id_fila')
+        .join('restaurante', 'restaurante.id', 'fila.id_restaurante')
+        .then(historico => {
+          usuario.historico = historico
+          return usuario
+        })
+    })
 }
 
 module.exports.addUsuario = usuario => {

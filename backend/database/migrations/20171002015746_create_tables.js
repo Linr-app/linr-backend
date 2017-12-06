@@ -100,6 +100,7 @@ exports.up = function (knex, Promise) {
       table.timestamp('hora_entrada_atendimento')
       table.timestamp('hora_saida_restaurante')
       table.integer('qtd_pessoas').notNullable()
+      table.integer('posicao_qdo_entrou').notNullable()
       table.boolean('tem_reserva').notNullable().defaultTo(false)
       table.boolean('desistiu_da_fila').notNullable().defaultTo(false)
     })

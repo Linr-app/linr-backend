@@ -19,7 +19,7 @@ router.post('/login', async ctx => {
   const email = ctx.request.body.email
   logger.debug('email: ', email)
   const senha = ctx.request.body.senha
-  const [usuario] = await queries.getSingleUsuarioCadastradoByEmail(email)
+  const usuario = await queries.getSingleUsuarioCadastradoByEmail(email)
   logger.debug('Usuario: ', usuario)
   if (usuario) {
     // Usuario existe
@@ -35,6 +35,7 @@ router.post('/login', async ctx => {
             nome: usuario.nome,
             email: usuario.email,
             telefone: usuario.telefone,
+            historico: usuario.historico,
           },
           token: token,
         },
