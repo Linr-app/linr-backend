@@ -94,7 +94,7 @@ router.put('/:id/enter', async ctx => {
     const usuario = {
       id_usuario: ctx.request.body.id_usuario,
       qtd_pessoas: ctx.request.body.qtd_pessoas,
-      posicao: ctx.request.body.posicao_qdo_entrou,
+      posicao_qdo_entrou: ctx.request.body.posicao_qdo_entrou,
     }
     const novo_usuario = await queries.addUserToFila(ctx.params.id, usuario)
     ctx.status = 200
