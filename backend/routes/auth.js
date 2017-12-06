@@ -5,9 +5,13 @@ const queries = require('../database/queries/usuarios')
 const router = new Router()
 
 /**
- GET    /logout Logout an user
- POST   /login  Login an user
- POST   /new    Register a new user
+ GET    /logout      Logout a user
+ POST   /login       Login a user
+ POST   /new         Register a new user
+ PUT    /updatetoken Update a user's FCM token
+ PUT    /updatename  Update a user's name
+ PUT    /updateemail Update a user's email
+ PUT    /updatepass  Update a user's password
  */
 
 /**
@@ -82,6 +86,82 @@ router.post('/new', async ctx => {
 router.post('/new/temp', async ctx => {
   try {
     const [usuario] = await queries.addUsuario(ctx.request.body)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/updatename', async ctx => {
+  try {
+    const [usuario] = await queries.updateNomeUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.nome)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/updateemail', async ctx => {
+  try {
+    const [usuario] = await queries.updateEmailUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.email)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/updatepass', async ctx => {
+  try {
+    const [usuario] = await queries.updateSenhaUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.senha)
+    ctx.status = 201
+    ctx.body = {
+      status: 'ok',
+      data: {
+        id_usuario: usuario.id,
+      },
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/updatetoken', async ctx => {
+  try {
+    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.fcmtoken)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
