@@ -94,7 +94,7 @@ router.put('/:id/enter', async ctx => {
     const usuario = {
       id_usuario: ctx.request.body.id_usuario,
       qtd_pessoas: ctx.request.body.qtd_pessoas,
-      posicao: ctx.request.body.posicao,
+      posicao: ctx.request.body.posicao_qdo_entrou,
     }
     const novo_usuario = await queries.addUserToFila(ctx.params.id, usuario)
     ctx.status = 200
@@ -141,7 +141,7 @@ router.put('/:id/sair', async ctx => {
    const data = new Date(ctx.body.hora_entrada_fila)
    const hora_de_entrada = data.getHours()*60 + data.getMinutes()
    
-   const posicao = ctx.request.body.posicao
+   const posicao = ctx.request.body.posicao_qdo_entrou
    const hora_de_saida = dia.getHours()*60 + dia.getMinutes()
    const tempo_de_espera_na_fila = hora_de_saida - hora_de_entrada //Bug caso vire o dia
    
