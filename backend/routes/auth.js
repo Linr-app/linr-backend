@@ -101,7 +101,7 @@ router.post('/new/temp', async ctx => {
 
 router.put('/update', async ctx => {
   try {
-    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body)
+    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.fcmtoken)
     ctx.status = 201
     ctx.body = {
       status: 'ok',

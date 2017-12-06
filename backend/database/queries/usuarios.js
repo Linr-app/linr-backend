@@ -41,7 +41,7 @@ module.exports.addUsuario = usuario => {
     .insert({
       id: usuario.id,
       nome: usuario.nome,
-      fcmtoken: usuario.token,
+      fcmtoken: usuario.fcmtoken,
       telefone: usuario.telefone,
     })
     .returning('*')
@@ -49,7 +49,7 @@ module.exports.addUsuario = usuario => {
 
 module.exports.updateTokenUsuarioCadastrado = (id_usuario, fcmtoken) => {
   return knex('usuario')
-    .where('id', id_usuario)
+    .where('id', parseInt(id_usuario))
     .update({fcmtoken: fcmtoken})
     .returning('*')
 }
