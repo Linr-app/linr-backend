@@ -204,7 +204,7 @@ router.post('/:id_restaurante/avaliacao', async ctx => {
   }
 })
 
-router.put('/:id_restaurante/avalicao', async ctx => {
+router.put('/:id_restaurante/avaliacao', async ctx => {
   try {
     const av = await queries.updateAvaliacao(ctx.params.id_restaurante, ctx.request.body)
     if (av) {
