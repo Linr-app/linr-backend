@@ -48,13 +48,9 @@ module.exports.addUsuario = usuario => {
 }
 
 module.exports.updateTokenUsuarioCadastrado = (id_usuario, fcmtoken) => {
-  return knex('usuario_fila')
-    .update({
-      fcmtoken: fcmtoken
-    })
-    .where({
-      'id_usuario': id_usuario,
-    })
+  return knex('usuario')
+    .where('id', id_usuario)
+    .update({fcmtoken: fcmtoken})
     .returning('*')
 }
 
