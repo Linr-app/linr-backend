@@ -161,7 +161,7 @@ router.put('/updatepass', async ctx => {
 
 router.put('/updatetoken', async ctx => {
   try {
-    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.fcmtoken)
+    const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body.session, ctx.request.body.fcmtoken)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
