@@ -185,7 +185,7 @@ router.get('/:id_restaurante/avaliacao', async ctx => {
 
 router.post('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.request.body)
+    const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.params.body)
     if (av.length) {
       ctx.status = 201
       ctx.body = {

@@ -35,6 +35,7 @@ router.post('/login', async ctx => {
         status: 'ok',
         session: {
           usuario: {
+            id: usuario.id,
             nome: usuario.nome,
             email: usuario.email,
             telefone: usuario.telefone,
@@ -104,7 +105,7 @@ router.post('/new/temp', async ctx => {
 
 router.put('/updatename', async ctx => {
   try {
-    const [usuario] = await queries.updateNomeUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.nome)
+    const [usuario] = await queries.updateNomeUsuarioCadastrado(ctx.request.body.session, ctx.request.body.nome)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
@@ -123,7 +124,7 @@ router.put('/updatename', async ctx => {
 
 router.put('/updateemail', async ctx => {
   try {
-    const [usuario] = await queries.updateEmailUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.email)
+    const [usuario] = await queries.updateEmailUsuarioCadastrado(ctx.request.body.session, ctx.request.body.email)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
@@ -142,7 +143,7 @@ router.put('/updateemail', async ctx => {
 
 router.put('/updatepass', async ctx => {
   try {
-    const [usuario] = await queries.updateSenhaUsuarioCadastrado(ctx.request.body.id_usuario, ctx.request.body.senha)
+    const [usuario] = await queries.updateSenhaUsuarioCadastrado(ctx.request.body.session, ctx.request.body.senha)
     ctx.status = 201
     ctx.body = {
       status: 'ok',

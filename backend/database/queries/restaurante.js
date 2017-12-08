@@ -76,14 +76,15 @@ module.exports.updateMesa = (ids, mesa) => {
  * @param id_usuario_cadastrado[int]
  * @param valor[int]
  */
-module.exports.updateAvaliacao = (id_restaurante, id_usuario_cadastrado, valor) => {
+module.exports.updateAvaliacao = async (id_restaurante, id_sessao, valor) => {
+  const [response] = await this.getUsuarioIdBySessionId(id_sessao)
   return knex('avaliacao')
     .update({
       'valor': parseInt(valor),
     })
     .where({
       'id_restaurante': parseInt(id_restaurante),
-      'id_usuario': parseInt(id_usuario_cadastrado),
+      'id_usuario': parseInt(response.id_usuario),
     })
     .returning('*')
 }
@@ -93,12 +94,13 @@ module.exports.updateAvaliacao = (id_restaurante, id_usuario_cadastrado, valor) 
  * @param id_restaurante[int]
  * @param id_usuario_cadastrado[int]
  */
-module.exports.getAvaliacao = (id_restaurante, id_usuario_cadastrado) => {
+module.exports.getAvaliacao = async (id_restaurante, id_sessao) => {
+  const [response] = await this.getUsuarioIdBySessionId(id_sessao)
   return knex('avaliacao')
     .select('valor')
     .where({
       'id_restaurante': parseInt(id_restaurante),
-      'id_usuario': parseInt(id_usuario_cadastrado),
+      'id_usuario': parseInt(response.id_usuario),
     })
 }
 
@@ -120,11 +122,12 @@ module.exports.getAverageAvaliacao = id_restaurante => {
  * @param id_usuario_cadastrado[int]
  * @param valor[int]
  */
-module.exports.createAvaliacao = (id_restaurante, id_usuario_cadastrado, valor) => {
+module.exports.createAvaliacao = async (id_restaurante, id_sessao, valor) => {
+  const [response] = await this.getUsuarioIdBySessionId(id_sessao)
   return knex('avaliacao')
     .insert({
       id_restaurante: parseInt(id_restaurante),
-      id_usuario: parseInt(id_usuario_cadastrado),
+      id_usuario: parseInt(response.id_usuario),
       valor: parseInt(valor),
     })
     .returning('*')

@@ -1,4 +1,5 @@
 const knex = require('../connection')
+const usuarioqueries = require('./usuarios')
 
 module.exports.getAllFilas = () => {
   return knex('fila')
@@ -60,6 +61,19 @@ module.exports.addUserToFila = (id_fila, user_data) => {
       id_fila: id_fila,
       id_usuario: user_data.id_usuario,
       qtd_pessoas: user_data.qtd_pessoas,
+      posicao_qdo_entrou: user_data.posicao_qdo_entrou
+    })
+    .returning('*')
+}
+
+module.exports.addUserCadastradoToFila = async (id_fila, user_data) => {
+  const [response] = await usuarioqueries.getUsuarioIdBySessionId(user_data.session_token)
+  return knex('usuario_fila')
+    .insert({
+      id_fila: id_fila,
+      id_usuario: response.id_usuario,
+      qtd_pessoas: user_data.qtd_pessoas,
+      posicao_qdo_entrou: user_data.posicao_qdo_entrou
     })
     .returning('*')
 }

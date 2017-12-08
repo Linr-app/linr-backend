@@ -94,8 +94,30 @@ router.put('/:id/enter', async ctx => {
     const usuario = {
       id_usuario: ctx.request.body.id_usuario,
       qtd_pessoas: ctx.request.body.qtd_pessoas,
+      posicao_qdo_entrou: ctx.request.body.posicao_qdo_entrou
     }
     const novo_usuario = await queries.addUserToFila(ctx.params.id, usuario)
+    ctx.status = 200
+    ctx.body = {
+      status: 'ok',
+    }
+  } catch (err) {
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Ocorreu um erro no servidor',
+    }
+  }
+})
+
+router.put('/:id/entercadastrado', async ctx => {
+  try {
+    const usuario = {
+      session_token: ctx.request.body.session_token,
+      qtd_pessoas: ctx.request.body.qtd_pessoas,
+      posicao_qdo_entrou: ctx.request.body.posicao_qdo_entrou
+    }
+    const novo_usuario = await queries.addUserCadastradoToFila(ctx.params.id, usuario)
     ctx.status = 200
     ctx.body = {
       status: 'ok',
