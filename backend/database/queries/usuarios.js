@@ -15,6 +15,12 @@ module.exports.generateTokenForUser = id => {
     })
 }
 
+module.exports.getUsuarioIdBySessionId = id => {
+  return knex('sessao')
+    .select('sessao.id_usuario')
+    .where('sessao.token', parseInt(id))
+}
+
 module.exports.getSingleUsuarioCadastradoById = id => {
   return knex('usuario_cadastrado')
     .select('*')
@@ -55,6 +61,38 @@ module.exports.addUsuario = usuario => {
       fcmtoken: usuario.fcmtoken,
       telefone: usuario.telefone,
     })
+    .returning('*')
+}
+
+module.exports.updateNomeUsuarioCadastrado = async (session, nome) => {
+  const [response] = await this.getUsuarioIdBySessionId(session)
+  return knex('usuario')
+    .where('id', parseInt(response.id_usuario))
+    .update({nome: nome})
+    .returning('*')
+}
+
+module.exports.updateEmailUsuarioCadastrado = async (session, email) => {
+  const [response] = await this.getUsuarioIdBySessionId(session)
+  return knex('usuario_cadastrado')
+    .where('id_usuario', parseInt(response.id_usuario))
+    .update({email: email})
+    .returning('*')
+}
+
+module.exports.updateSenhaUsuarioCadastrado = async (session, senha) => {
+  const [response] = await this.getUsuarioIdBySessionId(session)
+  return knex('usuario_cadastrado')
+    .where('id_usuario', parseInt(response.id_usuario))
+    .update({senha: senha})
+    .returning('*')
+}
+
+module.exports.updateTokenUsuarioCadastrado = async (session, fcmtoken) => {
+  const [response] = await this.getUsuarioIdBySessionId(session)
+  return knex('usuario')
+    .where('id', parseInt(response.id_usuario))
+    .update({fcmtoken: fcmtoken})
     .returning('*')
 }
 
