@@ -35,7 +35,6 @@ router.post('/login', async ctx => {
         status: 'ok',
         session: {
           usuario: {
-            id: usuario.id,
             nome: usuario.nome,
             email: usuario.email,
             telefone: usuario.telefone,
