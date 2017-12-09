@@ -163,8 +163,9 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
 
 router.get('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av_media = await queries.getAverageAvaliacao(ctx.params.id_restaurante)
-    const av_user = await queries.getAvaliacao(ctx.params.id_restaurante, ctx.request.body)
+    console.log('body: ' + ctx.request.body)
+    const [av_media] = await queries.getAverageAvaliacao(ctx.params.id_restaurante)
+    const [av_user] = await queries.getAvaliacao(ctx.params.id_restaurante, ctx.request.body.id_usuario)
     ctx.body = {
       status: 'ok',
       data: {
@@ -185,7 +186,7 @@ router.get('/:id_restaurante/avaliacao', async ctx => {
 
 router.post('/:id_restaurante/avaliacao', async ctx => {
   try {
-    const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.params.body)
+    const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.request.body)
     if (av.length) {
       ctx.status = 201
       ctx.body = {

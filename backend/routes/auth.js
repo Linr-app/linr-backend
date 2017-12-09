@@ -103,52 +103,26 @@ router.post('/new/temp', async ctx => {
   }
 })
 
-router.put('/updatename', async ctx => {
+router.put('/updateuser', async ctx => {
   try {
-    const [usuario] = await queries.updateNomeUsuarioCadastrado(ctx.request.body.session, ctx.request.body.nome)
-    ctx.status = 201
-    ctx.body = {
-      status: 'ok',
-      data: {
-        id_usuario: usuario.id,
-      },
+    if(ctx.request.body.nome !== '') {
+      const [nome] = await queries.updateNomeUsuarioCadastrado(ctx.request.body.session, ctx.request.body.nome)
     }
-  } catch (err) {
-    ctx.status = 400
-    ctx.body = {
-      status: 'error',
-      message: err.message || 'Ocorreu um erro no servidor',
+    if(ctx.request.body.email !== '') {
+      const [email] = await queries.updateEmailUsuarioCadastrado(ctx.request.body.session, ctx.request.body.email)
     }
-  }
-})
+    if(ctx.request.body.senha !== '') {
+      const [senha] = await queries.updateSenhaUsuarioCadastrado(ctx.request.body.session, ctx.request.body.senha)
+    }
+    if(ctx.request.body.telefone !== '') {
+      const [telefone] = await queries.updateTelefoneUsuarioCadastrado(ctx.request.body.session, ctx.request.body.telefone)
+    }
 
-router.put('/updateemail', async ctx => {
-  try {
-    const [usuario] = await queries.updateEmailUsuarioCadastrado(ctx.request.body.session, ctx.request.body.email)
     ctx.status = 201
     ctx.body = {
       status: 'ok',
       data: {
-        id_usuario: usuario.id,
-      },
-    }
-  } catch (err) {
-    ctx.status = 400
-    ctx.body = {
-      status: 'error',
-      message: err.message || 'Ocorreu um erro no servidor',
-    }
-  }
-})
 
-router.put('/updatepass', async ctx => {
-  try {
-    const [usuario] = await queries.updateSenhaUsuarioCadastrado(ctx.request.body.session, ctx.request.body.senha)
-    ctx.status = 201
-    ctx.body = {
-      status: 'ok',
-      data: {
-        id_usuario: usuario.id,
       },
     }
   } catch (err) {

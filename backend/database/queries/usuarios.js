@@ -72,6 +72,14 @@ module.exports.updateNomeUsuarioCadastrado = async (session, nome) => {
     .returning('*')
 }
 
+module.exports.updateTelefoneUsuarioCadastrado = async (session, telefone) => {
+  const [response] = await this.getUsuarioIdBySessionId(session)
+  return knex('usuario')
+    .where('id', parseInt(response.id_usuario))
+    .update({telefone: telefone})
+    .returning('*')
+}
+
 module.exports.updateEmailUsuarioCadastrado = async (session, email) => {
   const [response] = await this.getUsuarioIdBySessionId(session)
   return knex('usuario_cadastrado')
