@@ -309,7 +309,7 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
       id_restaurante: ctx.params.id_restaurante,
       id_mesa: ctx.params.id_mesa,
     }
-    const mesa = await queries.updateMesa(ids, ctx.params.body)
+    const [mesa] = await queries.updateMesa(ids, ctx.request.body)
     if (mesa) {
       ctx.status = 200
       ctx.body = {
