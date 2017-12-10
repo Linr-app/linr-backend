@@ -198,4 +198,41 @@ describe('routes : restaurantes', () => {
         })
     })
   })
+
+  describe('PUT /restaurantes/:id/mesas/:id', () => {
+    it('should return the restaurante that was updated', done => {
+      knex('restaurante')
+        .select('*')
+        .then(restaurante_db => {
+          const restaurante = restaurante_db[0]
+          knex('mesa')
+            .select('*')
+            .then(mesa_db => {
+              const mesa = mesa_db[0]
+              chai.request(server)
+                .put(`/restaurantes/${restaurante.id}/mesas/${mesa.id_mesa}`)
+                .send({
+                  ocupada: true,
+                })
+                .end((err, res) => {
+                  if (err) {
+                    logger.error(err)
+                  }
+                  should.not.exist(err)
+                  res.status.should.equal(200)
+                  res.type.should.equal('application/json')
+                  res.body.status.should.eql('ok')
+                  res.body.data.should.include.keys(
+                    'id_mesa', 'id_restaurante', 'capacidade', 'ocupada'
+                  )
+                  const newmesa = res.body.data
+                  newmesa.ocupada.should.not.eql(false)
+                  done()
+                })
+            })
+            .catch(done)
+        })
+        .catch(done)
+    })
+  })
 })
