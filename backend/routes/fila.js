@@ -126,7 +126,7 @@ router.get('/:id', async ctx => {
  * @param {int} Body.id_restaurante
  * @param {String} Body.hora_funcionamento_inicio
  * @param {String} Body.hora_funcionamento_fim
- * @param {int} Body.tempo_medio_inicial Tempo de espera medio em minutos
+ * @param {int} Body.tempo_medio_inicial Tempo de espera medio em segundos
  * @return Informacoes da nova fila criada
  */
 router.post('/', async ctx => {
@@ -177,7 +177,7 @@ router.post('/', async ctx => {
  * @param {Object} Body Parametros da request POST/PUT
  * @param {String} [Body.hora_funcionamento_inicio]
  * @param {String} [Body.hora_funcionamento_fim]
- * @param {int} [Body.tempo_medio_inicial] Tempo de espera medio em minutos
+ * @param {int} [Body.tempo_medio_inicial] Tempo de espera medio em segundos
  * @return Informacoes da fila alterada
  */
 router.put('/:id', async ctx => {
@@ -214,7 +214,7 @@ router.put('/:id', async ctx => {
  * @name POST /filas
  * @param {String} [hora_funcionamento_inicio]
  * @param {String} [hora_funcionamento_fim]
- * @param {int} [tempo_medio_inicial] Tempo de espera medio em minutos
+ * @param {int} [tempo_medio_inicial] Tempo de espera medio em segundos
  */
 router.put('/:id/enter', async ctx => {
   try {
