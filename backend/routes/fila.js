@@ -126,7 +126,7 @@ router.get('/:id', async ctx => {
  * @param {int} Body.id_restaurante
  * @param {String} Body.hora_funcionamento_inicio
  * @param {String} Body.hora_funcionamento_fim
- * @param {String} Body.tempo_medio_inicial 
+ * @param {int} Body.tempo_medio_inicial Segundos
  * @return Informacoes da nova fila criada
  */
 router.post('/', async ctx => {
@@ -138,8 +138,7 @@ router.post('/', async ctx => {
         status: 'ok',
         data: fila,
       }
-      const data = new Date(ctx.body.tempo_medio_inicial)
-      const tempo_medio_inicial = data.getHours()*60*60 + data.getMinutes()*60 + data.getSeconds()
+      const tempo_medio_inicial = tempo_medio_inicial
       await axios.post(`https://linrapp-prediction.herokuapp.com/register/${ctx.params.id}`, {
         tempo_medio_inicial: tempo_medio_inicial,
       })
