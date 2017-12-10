@@ -126,7 +126,7 @@ router.get('/:id', async ctx => {
  * @param {int} Body.id_restaurante
  * @param {String} Body.hora_funcionamento_inicio
  * @param {String} Body.hora_funcionamento_fim
- * @param {int} Body.tempo_medio_inicial Segundos
+ * @param {int} Body.tempo_medio_inicial Tempo de espera medio em segundos
  * @return Informacoes da nova fila criada
  */
 router.post('/', async ctx => {
