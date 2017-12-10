@@ -30,6 +30,11 @@ yarn
     yarn run test
   ```
 
+  * Gerar documentacao:
+  ```
+    yarn run docs
+  ```
+
 ## API
 
 Para fazer chamadas ao API do frontend, basta fazer o seguinte:
@@ -55,99 +60,3 @@ O API sempre retorna no formato
 
 ou seja, o status diz se a chamada foi bem sucedida. Se sim, o campo `data` terá
 or objetos descritos a seguir.
-
-1. GET    /restaurantes
-
-  Retorna todos os objetos Restaurante:
-  ```json
-  [
-    {
-      id: string,
-      nome: string,
-      endereco: string,
-      descricao: string,
-      site: string,
-      telefone :string,
-      hora_funcionamento_inicio: string,
-      hora_funcionamento_fim: string,
-      forma_pagamento: string,
-      informacao_adicional: string,
-      filas: [string],
-    },
-    ...
-  ]
-  ```
-2. GET    /restaurantess/:id
-
-  Retorna um unico objeto Restaurante:
-  ```json
-  {
-    id: string,
-    nome: string,
-    endereco: string,
-    descricao: string,
-    site: string,
-    telefone :string,
-    hora_funcionamento_inicio: string,
-    hora_funcionamento_fim: string,
-    forma_pagamento: string,
-    informacao_adicional: string,
-    filas: [string],
-  }
-  ```
-3. POST   /restaurantes
-
-  Adiciona um restaurante novo. Campos necessários para a inserção:
-  ```json
-  {
-    id: string,
-    nome: string,
-    endereco: string,
-    descricao: string,
-    site: string,
-    telefone :string,
-  }
-  ```
-
-4. GET    /filas
-
-  Retorna todas as filas em uma lista.
-
-5. GET    /filas/:id
-
-  Retorna a fila com o id especificado
-
-6. POST   /filas
-
-  Adiciona uma nova fila. Campos necessários para a inserção:
-  ```json
-  {
-    id: integer,
-    id_restaurante: integer,
-    hora_funcionamento_inicio: string,
-    hora_funcionamento_fim: string,
-    tempo_medio_inicial: integer,
-  }
-  ```
-
-7. PUT    /filas/:id
-
-  Edita uma fila existente. Campos possíveis de alteração:
-  ```json
-  {
-    hora_funcionamento_inicio: string,
-    hora_funcionamento_fim: string,
-    tempo_medio_inicial: integer,
-  }
-  ```
-
-8. PUT    /filas/:id/enter
-
-  Adiciona um novo usuario na fila :id. Campos necessários para inserção:
-  ```json
-  {
-    id_usuario: integer,
-    qtd_pessoas: integer,
-  }
-  ```
-  em que `ìd_usuario` é o ID do usuário a ser inserido.

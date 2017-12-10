@@ -5,13 +5,34 @@ const queries = require('../database/queries/fila')
 const router = new Router()
 
 /**
- GET    /fila        Return ALL filas
- GET    /fila/:id    Return a SINGLE fila
- POST   /fila        Add a fila
- PUT    /fila/:id    Update a fila
- DELETE /fila/:id    Delete a fila
+ *
+ * @module Filas
  */
 
+/**
+ * Retorna todas as filas presentes no banco.
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      id_restaurante: int,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      tempo_medio_inicial: String,
+ *      descricao: Optional[String]
+ *   },
+ *   ...
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name GET /filas
+ * @return Informacoes de todas as filas
+ */
 router.get('/', async ctx => {
   try {
     ctx.body = {
@@ -23,6 +44,42 @@ router.get('/', async ctx => {
   }
 })
 
+/**
+ * Retorna uma fila especifica com ID `id`
+ *
+ * Formato de retorno:
+ * ```json
+ * {
+ *   id: int,
+ *   id_restaurante: int,
+ *   hora_funcionamento_inicio: Optional[String],
+ *   hora_funcionamento_fim: Optional[String],
+ *   tempo_medio_inicial: String,
+ *   descricao: Optional[String],
+ *   usuarios_na_fila: {
+ *     id: int,
+ *     id_usuario: int,
+ *     nome: String,
+ *     telefone: String,
+ *     fcmtoken: String,
+ *     hora_entrada_fila: String,
+ *     hora_entrada_atendimento: Optional[String],
+ *     hora_saida_restaurante: Optional[String],
+ *     qtd_pessoas: int,
+ *     tem_reserva: bool,
+ *     desistiu_da_fila: bool
+ *   }
+ * }
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name GET /filas/:id
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID da fila
+ * @return Informacoes da fila com ID `id`
+ */
 router.get('/:id', async ctx => {
   try {
     const fila = await queries.getSingleFila(ctx.params.id)
@@ -43,6 +100,35 @@ router.get('/:id', async ctx => {
   }
 })
 
+/**
+ * Cria uma nova fila
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      id_restaurante: int,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      tempo_medio_inicial: String,
+ *      descricao: Optional[String]
+ *   },
+ *   ...
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name POST /filas
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {int} Body.id_restaurante
+ * @param {String} Body.hora_funcionamento_inicio
+ * @param {String} Body.hora_funcionamento_fim
+ * @param {int} Body.tempo_medio_inicial Tempo de espera medio em minutos
+ * @return Informacoes da nova fila criada
+ */
 router.post('/', async ctx => {
   try {
     const fila = await queries.addFila(ctx.request.body)
@@ -64,6 +150,36 @@ router.post('/', async ctx => {
   }
 })
 
+/**
+ * Edita a fila com o ID `id`
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      id_restaurante: int,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      tempo_medio_inicial: String,
+ *      descricao: Optional[String]
+ *   },
+ *   ...
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name PUT /filas/:id
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID da fila
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {String} [Body.hora_funcionamento_inicio]
+ * @param {String} [Body.hora_funcionamento_fim]
+ * @param {int} [Body.tempo_medio_inicial] Tempo de espera medio em minutos
+ * @return Informacoes da fila alterada
+ */
 router.put('/:id', async ctx => {
   try {
     const fila = await queries.updateFila(ctx.params.id, ctx.request.body)
@@ -89,6 +205,17 @@ router.put('/:id', async ctx => {
   }
 })
 
+/**
+ * Adiciona um novo usuario na fila com o ID `id`
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name POST /filas
+ * @param {String} [hora_funcionamento_inicio]
+ * @param {String} [hora_funcionamento_fim]
+ * @param {int} [tempo_medio_inicial] Tempo de espera medio em minutos
+ */
 router.put('/:id/enter', async ctx => {
   try {
     const usuario = {
@@ -110,6 +237,21 @@ router.put('/:id/enter', async ctx => {
   }
 })
 
+/**
+ * Adiciona um novo usuario cadastrado a fila de ID `id` a partir do token.
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name PUT /filas/:id/entercadastrado
+ * @param {int} id Novo id do usuario a ser criado
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID da fila
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {int} [Body.session_token] Token da sessao
+ * @param {int} [Body.qtd_pessoas] Quantidade de pessoas junto com o usuario
+ * @param {int} [Body.posicao_qdo_entrou] Posicao que entrou na fila
+ */
 router.put('/:id/entercadastrado', async ctx => {
   try {
     const usuario = {
@@ -131,6 +273,18 @@ router.put('/:id/entercadastrado', async ctx => {
   }
 })
 
+/**
+ * Marca um usuario como desistido na fila com o ID `id`
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name PUT /filas/:id/desistir
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID da fila
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {int} [Body.id_usuario_fila]
+ */
 router.put('/:id/desistir', async ctx => {
   try {
     const id_usuario_fila = ctx.request.body.id_usuario_fila
@@ -148,6 +302,18 @@ router.put('/:id/desistir', async ctx => {
   }
 })
 
+/**
+ * Marca um usuario como saido na fila com o ID `id`
+ *
+ * @function
+ * @inner
+ * @memberof module:Filas
+ * @name PUT /filas/:id/sair
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID da fila
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {int} [Body.id_usuario_fila]
+ */
 router.put('/:id/sair', async ctx => {
   try {
     const id_usuario = ctx.request.body.id_usuario_fila

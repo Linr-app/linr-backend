@@ -5,19 +5,20 @@ const queries = require('../database/queries/usuarios')
 const router = new Router()
 
 /**
- GET    /logout      Logout a user
- POST   /login       Login a user
- POST   /new         Register a new user
- PUT    /updatetoken Update a user's FCM token
- PUT    /updatename  Update a user's name
- PUT    /updateemail Update a user's email
- PUT    /updatepass  Update a user's password
+ * Auth module.
+ *
+ * @module Auth
  */
 
 /**
- * Parametros:
- *  email
- *  senha
+ * Realiza o login no servico, retornando as informacoes do usuario e um token
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name POST /auth/login
+ * @param {String} email
+ * @param {String} senha
  */
 router.post('/login', async ctx => {
   const email = ctx.request.body.email
@@ -60,11 +61,35 @@ router.post('/login', async ctx => {
   }
 })
 
-router.get('/logout', async ctx => {
+/**
+ * Realiza o logout do usuario no servico
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name POST /auth/logout
+ */
+router.post('/logout', async ctx => {
   ctx.logout()
   ctx.redirect('/')
 })
 
+/**
+ * Adiciona um novo usuario cadastrado ao banco de dados.
+ *
+ * Como um usuario cadastrado requer um Usuario normal para existir, é
+ * necessário adicionar um Usuario primeiro e depois criar o usuário cadastrado.
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name POST /auth/new
+ * @param {int} id Novo id do usuario a ser criado
+ * @param {String} nome
+ * @param {String} telefone
+ * @param {String} email
+ * @param {String} senha
+ */
 router.post('/new', async ctx => {
   try {
     const [usuario] = await queries.addUsuarioCadastrado(ctx.request.body)
@@ -84,6 +109,17 @@ router.post('/new', async ctx => {
   }
 })
 
+/**
+ * Adiciona um novo usuario temporario ao banco de dados.
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name POST /auth/new/temp
+ * @param {int} id Novo id do usuario a ser criado
+ * @param {String} nome
+ * @param {String} telefone
+ */
 router.post('/new/temp', async ctx => {
   try {
     const [usuario] = await queries.addUsuario(ctx.request.body)
@@ -103,6 +139,19 @@ router.post('/new/temp', async ctx => {
   }
 })
 
+/**
+ * Atualiza os dados de um usuario cadastrado
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name PUT /auth/updateuser
+ * @param {int} id Novo id do usuario a ser criado
+ * @param {String} nome
+ * @param {String} telefone
+ * @param {String} email
+ * @param {String} senha
+ */
 router.put('/updateuser', async ctx => {
   try {
     if(ctx.request.body.nome !== '') {
@@ -121,9 +170,7 @@ router.put('/updateuser', async ctx => {
     ctx.status = 201
     ctx.body = {
       status: 'ok',
-      data: {
-
-      },
+      data: {},
     }
   } catch (err) {
     ctx.status = 400
@@ -134,6 +181,19 @@ router.put('/updateuser', async ctx => {
   }
 })
 
+/**
+ * Atualiza o token Firebase de um usuario cadastrado
+ *
+ * @function
+ * @inner
+ * @memberof module:Auth
+ * @name PUT /auth/updatetoken
+ * @param {int} id Novo id do usuario a ser criado
+ * @param {String} nome
+ * @param {String} telefone
+ * @param {String} email
+ * @param {String} senha
+ */
 router.put('/updatetoken', async ctx => {
   try {
     const [usuario] = await queries.updateTokenUsuarioCadastrado(ctx.request.body.session, ctx.request.body.fcmtoken)

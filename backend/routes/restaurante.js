@@ -5,18 +5,39 @@ const queries = require('../database/queries/restaurante')
 const router = new Router()
 
 /**
- GET    /restaurante        Return ALL restaurants
- GET    /restaurante/:id    Return a SINGLE restaurant
- POST   /restaurante        Add a restaurant
- PUT    /restaurante/:id    Update a restaurant
- DELETE /restaurante/:id    Delete a restaurant
- 
- GET    /restaurante/:id/avaliacao/           Returna a avaliação media
- GET    /restaurante/:id/avaliacao/           Returna a avaliação de uma pessoa
- POST   /restaurante/:id/avaliacao/           Add uma avaliação
- PUT    /restaurante/:id/avaliacao/           Atualiza uma avaliacao
+ *
+ * @module Restaurantes
  */
 
+ /**
+ * Retorna todos os restaurantes presentes no banco.
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      nome: String,
+ *      endereco: String,
+ *      descricao: String,
+ *      site: String,
+ *      telefone: String,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      forma_pagamento: Optional[String],
+ *      informacao_adicional: Optional[String],
+ *      filas: int[] // IDs das filas do restaurante
+ *   },
+ *   ...
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name GET /restaurantes
+ * @return Informacoes de todos os restaurantes
+ */
 router.get('/', async ctx => {
   try {
     ctx.body = {
@@ -28,6 +49,43 @@ router.get('/', async ctx => {
   }
 })
 
+ /**
+ * Retorna um restaunte especifico com ID `id`
+ *
+ * Formato de retorno:
+ * ```json
+ * {
+ *   id: int,
+ *   nome: String,
+ *   endereco: String,
+ *   descricao: String,
+ *   site: String,
+ *   telefone: String,
+ *   hora_funcionamento_inicio: Optional[String],
+ *   hora_funcionamento_fim: Optional[String],
+ *   forma_pagamento: Optional[String],
+ *   informacao_adicional: Optional[String],
+ *   filas: int[], // IDs das filas do restaurante
+ *   mesas: [
+ *     {
+ *       id_mesa: int,
+ *       capacidade: int,
+ *       ocupada: bool
+ *     },
+ *     ...
+ *   ]
+ * }
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name GET /restaurantes/:id
+ * @return Informacoes de todos os restaurantes
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID do restaurante
+ * @return Informacoes do restaurante com ID `id`
+ */
 router.get('/:id', async ctx => {
   try {
     const restaurante = await queries.getSingleRestaurante(ctx.params.id)
@@ -48,6 +106,38 @@ router.get('/:id', async ctx => {
   }
 })
 
+/**
+ * Cria um novo restaurante
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      nome: String,
+ *      endereco: String,
+ *      descricao: String,
+ *      site: String,
+ *      telefone: String,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      forma_pagamento: Optional[String],
+ *      informacao_adicional: Optional[String]
+ *   }
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name POST /restaurantes
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {int} Body.id_restaurante
+ * @param {String} Body.hora_funcionamento_inicio
+ * @param {String} Body.hora_funcionamento_fim
+ * @param {int} Body.tempo_medio_inicial Tempo de espera medio em minutos
+ * @return Informacoes do novo restaurante criado
+ */
 router.post('/', async ctx => {
   try {
     const restaurante = await queries.addRestaurante(ctx.request.body)
@@ -69,6 +159,46 @@ router.post('/', async ctx => {
   }
 })
 
+/**
+ * Edita o restaurante com o ID `id`
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id: int,
+ *      nome: String,
+ *      endereco: String,
+ *      descricao: String,
+ *      site: String,
+ *      telefone: String,
+ *      hora_funcionamento_inicio: Optional[String],
+ *      hora_funcionamento_fim: Optional[String],
+ *      forma_pagamento: Optional[String],
+ *      informacao_adicional: Optional[String]
+ *   }
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name PUT /restaurantes/:id
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID do restaurante
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {String} [Body.nome]
+ * @param {String} [Body.hora_funcionamento_fim]
+ * @param {String} [Body.endereco]
+ * @param {String} [Body.descricao]
+ * @param {String} [Body.site]
+ * @param {String} [Body.telefone]
+ * @param {String} [Body.hora_funcionamento_inicio]
+ * @param {String} [Body.hora_funcionamento_fim]
+ * @param {String} [Body.forma_pagamento]
+ * @param {String} [Body.informacao_adicional]
+ * @return Informacoes do restaurante alterado
+ */
 router.put('/:id', async ctx => {
   try {
     const [restaurante] = await queries.updateRestaurante(ctx.params.id, ctx.request.body)
@@ -95,10 +225,28 @@ router.put('/:id', async ctx => {
 })
 
 /**
- * Parametros:
- *  id_mesa
- *  capacidade
+ * Adiciona uma nova mesa ao restaurante.
  *
+ * Formato de retorno:
+ * ```json
+ * {
+ *    id_mesa: int,
+ *    id_restaurante: int,
+ *    capacidade: int,
+ *    ocupada: bool
+ * }
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name POST /restaurantes/:id/mesas
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id ID do restaurante
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {String} Body.id_mesa ID da mesa a ser adicionada
+ * @param {String} Body.capacidade Capacidade da mesa em cadeiras
+ * @return Informacoes da mesa adicionada
  */
 router.post('/:id/mesas', async ctx => {
   try {
@@ -130,6 +278,31 @@ router.post('/:id/mesas', async ctx => {
   }
 })
 
+/**
+ * Adiciona uma nova mesa ao restaurante.
+ *
+ * Formato de retorno:
+ * ```json
+ * {
+ *    id_mesa: int,
+ *    id_restaurante: int,
+ *    capacidade: int,
+ *    ocupada: bool
+ * }
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name PUT /restaurantes/:id_restaurante/mesas/:id_mesa
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id_restaurante ID do restaurante
+ * @param {int} URL.id_mesa ID da mesa
+ * @param {Object} Body Parametros da request POST/PUT
+ * @param {String} Body.capacidade Capacidade da mesa em cadeiras
+ * @param {bool} Body.Ocupada Se a mesa esta ocupada ou nao
+ * @return Informacoes da mesa alterada
+ */
 router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
   try {
     const ids = {
@@ -161,6 +334,27 @@ router.put('/:id_restaurante/mesas/:id_mesa', async ctx => {
 
 // AVALIACAO
 
+/**
+ * Retorna as avaliacoes do restaurante com o ID `id_restaurante`, tanto a media
+ * quanto a de um usuario com o ID `id_usuario`.
+ *
+ * Formato de retorno:
+ * ```json
+ * {
+ *    avaliacao_media: float,
+ *    avaliacao_usuario: float,
+ * }
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name GET /restaurantes/:id_restaurante/avaliacao/:id_usuario
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id_restaurante ID do restaurante
+ * @param {int} URL.id_usuario ID do usuario avaliador
+ * @return Avaliacoes do restaurante
+ */
 router.get('/:id_restaurante/avaliacao/:id_usuario', async ctx => {
   try {
     const [av_media] = await queries.getAverageAvaliacao(ctx.params.id_restaurante)
@@ -182,7 +376,33 @@ router.get('/:id_restaurante/avaliacao/:id_usuario', async ctx => {
   }
 })
 
-
+/**
+ * Adiciona uma nova avaliacao ao restaurante com o ID `id_restaurante`
+ * proveniente de um usuario com o ID `id_usuario` com o valor `valor`.\
+ *
+ * WTF POR FAVOR ALGUEM ARRUMA ESSE NEGOCIO
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id_restaurante: float,
+ *      id_usuario: int,
+ *      valor: int
+ *   }
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name POST /restaurantes/:id_restaurante/avaliacao/:id_usuario/:valor
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id_restaurante ID do restaurante
+ * @param {int} URL.id_usuario ID do usuario avaliador
+ * @param {int} URL.valor Avaliacao a ser dada
+ * @return Avaliacao adicionada
+ */
 router.post('/:id_restaurante/avaliacao/:id_usuario/:valor', async ctx => {
   try {
     const av = await queries.createAvaliacao(ctx.params.id_restaurante, ctx.params.id_usuario, ctx.params.valor)
@@ -204,6 +424,33 @@ router.post('/:id_restaurante/avaliacao/:id_usuario/:valor', async ctx => {
   }
 })
 
+/**
+ * Altera uma avaliacao ao restaurante com o ID `id_restaurante`
+ * proveniente de um usuario com o ID `id_usuario` com o valor `valor`.\
+ *
+ * WTF POR FAVOR ALGUEM ARRUMA ESSE NEGOCIO
+ *
+ * Formato de retorno:
+ * ```json
+ * [
+ *   {
+ *      id_restaurante: float,
+ *      id_usuario: int,
+ *      valor: int
+ *   }
+ * ]
+ * ```
+ *
+ * @function
+ * @inner
+ * @memberof module:Restaurantes
+ * @name PUT /restaurantes/:id_restaurante/avaliacao/:id_usuario/:valor
+ * @param {Object} URL Parametros de URL
+ * @param {int} URL.id_restaurante ID do restaurante
+ * @param {int} URL.id_usuario ID do usuario avaliador
+ * @param {int} URL.valor Avaliacao a ser dada
+ * @return Avaliacao alterada
+ */
 router.put('/:id_restaurante/avaliacao/:id_usuario/:valor', async ctx => {
   try {
     const av = await queries.updateAvaliacao(ctx.params.id_restaurante, ctx.params.id_usuario, ctx.params.valor)

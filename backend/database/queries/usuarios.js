@@ -104,12 +104,6 @@ module.exports.updateTokenUsuarioCadastrado = async (session, fcmtoken) => {
     .returning('*')
 }
 
-/**
- * Adiciona um novo usuario cadastrado ao banco de dados.
- * Como um usuario cadastrado requer um Usuario normal para existir, é
- * necessário adicionar um Usuario primeiro e depois criar o usuário cadastrado.
- * @param usuario_cadastrado Objeto contendo id, nome, telefone, email e senha
- */
 module.exports.addUsuarioCadastrado = usuario_cadastrado => {
   return knex('usuario')
     .insert({
