@@ -138,7 +138,7 @@ router.post('/', async ctx => {
         status: 'ok',
         data: fila,
       }
-	     const data = new Date(ctx.body.tempo_medio_inicial)
+      const data = new Date(ctx.body.tempo_medio_inicial)
       const tempo_medio_inicial = data.getHours()*60*60 + data.getMinutes()*60 + data.getSeconds()
       await axios.post(`https://linrapp-prediction.herokuapp.com/register/${ctx.params.id}`, {
         tempo_medio_inicial: tempo_medio_inicial,
@@ -328,19 +328,20 @@ router.put('/:id/sair', async ctx => {
     ctx.body = {
       status: 'ok',
     }
-	const dia = new Date()
-	const dia_da_semama = dia.getDay()
+    const dia = new Date()
+    const dia_da_semama = dia.getDay()
 
-	const data = new Date(ctx.body.hora_entrada_fila)
-	const hora_de_entrada = data.getHours()*60*60 + data.getMinutes()*60 + data.getSeconds()
+    const data = new Date(ctx.body.hora_entrada_fila)
+    const hora_de_entrada = data.getHours()*60*60 + data.getMinutes()*60 + data.getSeconds()
 
-	const posicao = ctx.request.body.posicao_qdo_entrou
-	const hora_de_saida = dia.getHours()*60*60 + dia.getMinutes()*60 + dia.getSeconds()
+    const posicao = ctx.request.body.posicao_qdo_entrou
+    const hora_de_saida = dia.getHours()*60*60 + dia.getMinutes()*60 + dia.getSeconds()
 
-	const tempo_de_espera_na_fila = hora_de_saida - hora_de_entrada
-	if (tempo_de_espera_na_fila < 0) { //Caso vire o dia
-	  tempo_de_espera_na_fila = tempo_de_espera_na_fila + 1440*60
-	} 
+    const tempo_de_espera_na_fila = hora_de_saida - hora_de_entrada
+    
+    if (tempo_de_espera_na_fila < 0) { //Caso vire o dia
+      tempo_de_espera_na_fila = tempo_de_espera_na_fila + 1440*60
+    } 
    
     await axios.post(`https://linrapp-prediction.herokuapp.com/fit/${ctx.params.id}`, {
       dia_da_semana: dia_da_semama,
