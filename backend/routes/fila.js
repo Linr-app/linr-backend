@@ -1,3 +1,4 @@
+const axios = require('axios')
 const Router = require('koa-router')
 
 const queries = require('../database/queries/fila')
@@ -138,7 +139,7 @@ router.post('/', async ctx => {
         status: 'ok',
         data: fila,
       }
-      const tempo_medio_inicial = tempo_medio_inicial
+      const tempo_medio_inicial = ctx.request.body.tempo_medio_inicial
       await axios.post(`https://linrapp-prediction.herokuapp.com/register/${ctx.params.id}`, {
         tempo_medio_inicial: tempo_medio_inicial,
       })
